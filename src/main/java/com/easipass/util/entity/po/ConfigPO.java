@@ -11,6 +11,9 @@ import com.zj0724.common.component.jdbc.AccessDatabaseJdbc.FieldType;
 @Table(name = "CONFIG")
 public final class ConfigPO extends AbstractPO {
 
+    @Column(name = "GROUP", type = FieldType.VARCHAR)
+    private String group;
+
     @Column(name = "CODE", type = FieldType.VARCHAR)
     private String code;
 
@@ -19,6 +22,14 @@ public final class ConfigPO extends AbstractPO {
 
     @Column(name = "DATA", type = FieldType.VARCHAR)
     private String data;
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
 
     public String getCode() {
         return code;
@@ -42,6 +53,28 @@ public final class ConfigPO extends AbstractPO {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public enum Group {
+
+        SWGD_DATABASE("SWGD数据库"),
+
+        CUS_RESULT("报关单回执"),
+
+        AGENT_RESULT("代理委托回执"),
+
+        SELENIUM("selenium");
+
+        private final String name;
+
+        Group(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
     }
 
     public enum Code {

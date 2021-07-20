@@ -11,7 +11,6 @@ public final class RunnerServiceImpl implements RunnerService {
     public void gc() {
         new Thread(() -> {
             while (true) {
-                System.out.println(Thread.currentThread().getName() + "开启");
                 System.gc();
                 ThreadUtil.sleep(1000 * 60 * 60);
             }
