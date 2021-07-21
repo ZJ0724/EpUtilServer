@@ -60,6 +60,7 @@ public final class ConfigPO extends AbstractPO {
         public static final UPLOAD_CUS_RESULT UPLOAD_CUS_RESULT = new UPLOAD_CUS_RESULT();
         public static final UPLOAD_AGENT_RESULT UPLOAD_AGENT_RESULT = new UPLOAD_AGENT_RESULT();
         public static final UPLOAD_TRANS_RESULT UPLOAD_TRANS_RESULT = new UPLOAD_TRANS_RESULT();
+        public static final SELENIUM SELENIUM = new SELENIUM();
     }
 
     // SWGD_DATABASE
@@ -74,6 +75,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "地址";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.SWGD_DATABASE;
+            }
         };
 
         public final Code PORT = new Code() {
@@ -85,6 +91,11 @@ public final class ConfigPO extends AbstractPO {
             @Override
             public String getName() {
                 return "端口";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.SWGD_DATABASE;
             }
         };
 
@@ -98,6 +109,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "SID";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.SWGD_DATABASE;
+            }
         };
 
         public final Code USERNAME = new Code() {
@@ -110,6 +126,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "密码";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.SWGD_DATABASE;
+            }
         };
 
         public final Code PASSWORD = new Code() {
@@ -121,6 +142,11 @@ public final class ConfigPO extends AbstractPO {
             @Override
             public String getName() {
                 return "密码";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.SWGD_DATABASE;
             }
         };
 
@@ -147,6 +173,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "ftp类型";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_CUS_RESULT;
+            }
         };
 
         public final Code FTP_HOST = new Code() {
@@ -158,6 +189,11 @@ public final class ConfigPO extends AbstractPO {
             @Override
             public String getName() {
                 return "ftp地址";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_CUS_RESULT;
             }
         };
 
@@ -171,6 +207,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "ftp端口";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_CUS_RESULT;
+            }
         };
 
         public final Code FTP_USERNAME = new Code() {
@@ -182,6 +223,11 @@ public final class ConfigPO extends AbstractPO {
             @Override
             public String getName() {
                 return "ftp用户名";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_CUS_RESULT;
             }
         };
 
@@ -195,6 +241,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "ftp密码";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_CUS_RESULT;
+            }
         };
 
         public final Code FTP_UPLOAD_PATH = new Code() {
@@ -206,6 +257,11 @@ public final class ConfigPO extends AbstractPO {
             @Override
             public String getName() {
                 return "ftp上传路径";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_CUS_RESULT;
             }
         };
 
@@ -232,6 +288,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "ftp类型";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_AGENT_RESULT;
+            }
         };
 
         public final Code FTP_HOST = new Code() {
@@ -243,6 +304,11 @@ public final class ConfigPO extends AbstractPO {
             @Override
             public String getName() {
                 return "ftp地址";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_AGENT_RESULT;
             }
         };
 
@@ -256,6 +322,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "ftp端口";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_AGENT_RESULT;
+            }
         };
 
         public final Code FTP_USERNAME = new Code() {
@@ -267,6 +338,11 @@ public final class ConfigPO extends AbstractPO {
             @Override
             public String getName() {
                 return "ftp用户名";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_AGENT_RESULT;
             }
         };
 
@@ -280,6 +356,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "ftp密码";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_AGENT_RESULT;
+            }
         };
 
         public final Code FTP_UPLOAD_PATH = new Code() {
@@ -291,6 +372,11 @@ public final class ConfigPO extends AbstractPO {
             @Override
             public String getName() {
                 return "ftp上传路径";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_AGENT_RESULT;
             }
         };
 
@@ -317,6 +403,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "ftp类型";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_TRANS_RESULT;
+            }
         };
 
         public final Code FTP_HOST = new Code() {
@@ -328,6 +419,11 @@ public final class ConfigPO extends AbstractPO {
             @Override
             public String getName() {
                 return "ftp地址";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_TRANS_RESULT;
             }
         };
 
@@ -341,6 +437,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "ftp端口";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_TRANS_RESULT;
+            }
         };
 
         public final Code FTP_USERNAME = new Code() {
@@ -352,6 +453,11 @@ public final class ConfigPO extends AbstractPO {
             @Override
             public String getName() {
                 return "ftp用户名";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_TRANS_RESULT;
             }
         };
 
@@ -365,6 +471,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "ftp密码";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_TRANS_RESULT;
+            }
         };
 
         public final Code FTP_UPLOAD_PATH = new Code() {
@@ -376,6 +487,11 @@ public final class ConfigPO extends AbstractPO {
             @Override
             public String getName() {
                 return "ftp上传路径";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_TRANS_RESULT;
             }
         };
 
@@ -402,6 +518,11 @@ public final class ConfigPO extends AbstractPO {
             public String getName() {
                 return "服务地址";
             }
+
+            @Override
+            public Group getGroup() {
+                return Groups.SELENIUM;
+            }
         };
 
         public final Code IS_SHOW = new Code() {
@@ -413,6 +534,11 @@ public final class ConfigPO extends AbstractPO {
             @Override
             public String getName() {
                 return "是否显示浏览器";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.SELENIUM;
             }
         };
 
@@ -437,6 +563,8 @@ public final class ConfigPO extends AbstractPO {
         String getCode();
 
         String getName();
+
+        Group getGroup();
     }
 
 }

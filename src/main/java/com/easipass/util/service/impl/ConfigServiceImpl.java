@@ -33,7 +33,10 @@ public final class ConfigServiceImpl implements ConfigService {
 
     @Override
     public ConfigPO getByCode(ConfigPO.Code code) {
-        return getByCode(code.name());
+        if (code == null) {
+            throw new InfoException("code is null");
+        }
+        return getByCode(code.getCode());
     }
 
     @Override
