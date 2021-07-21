@@ -55,75 +55,388 @@ public final class ConfigPO extends AbstractPO {
         this.data = data;
     }
 
-    public enum Group {
-
-        SWGD_DATABASE("SWGD数据库"),
-
-        CUS_RESULT("报关单回执"),
-
-        AGENT_RESULT("代理委托回执"),
-
-        SELENIUM("selenium");
-
-        private final String name;
-
-        Group(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
+    public static final class Groups {
+        public static final SWGD_DATABASE SWGD_DATABASE = new SWGD_DATABASE();
+        public static final UPLOAD_CUS_RESULT UPLOAD_CUS_RESULT = new UPLOAD_CUS_RESULT();
+        public static final UPLOAD_AGENT_RESULT UPLOAD_AGENT_RESULT = new UPLOAD_AGENT_RESULT();
+        public static final UPLOAD_TRANS_RESULT UPLOAD_TRANS_RESULT = new UPLOAD_TRANS_RESULT();
     }
 
-    public enum Code {
-
-        SWGD_DATABASE_HOST("SWGD数据库地址"),
-
-        SWGD_DATABASE_PORT("SWGD数据库端口"),
-
-        SWGD_DATABASE_SID("SWGD数据库sid"),
-
-        SWGD_DATABASE_USERNAME("SWGD数据库账号"),
-
-        SWGD_DATABASE_PASSWORD("SWGD数据库密码"),
-
-        UPLOAD_CUS_RESULT_SFTP_HOST("上传回执sftp地址"),
-
-        UPLOAD_CUS_RESULT_SFTP_PORT("上传回执sftp端口"),
-
-        UPLOAD_CUS_RESULT_SFTP_USERNAME("上传回执sftp账号"),
-
-        UPLOAD_CUS_RESULT_SFTP_PASSWORD("上传回执sftp密码"),
-
-        UPLOAD_CUS_RESULT_SFTP_PATH("上传回执sftp路径"),
-
-        UPLOAD_AGENT_RESULT_SFTP_PATH("上传代理委托回执路径"),
-
-        SELENIUM_SERVER("selenium服务地址"),
-
-        SELENIUM_IS_SHOW("是否显示浏览器");
-
-        private final String note;
-
-        Code(String note) {
-            this.note = note;
-        }
-
-        public String getNote() {
-            return note;
-        }
-
-        public static Code getByCode(String code) {
-            for (Code code1 : Code.values()) {
-                if (code1.name().equals(code)) {
-                    return code1;
-                }
+    // SWGD_DATABASE
+    public static final class SWGD_DATABASE implements Group {
+        public final Code HOST = new Code() {
+            @Override
+            public String getCode() {
+                return "HOST";
             }
-            return null;
+
+            @Override
+            public String getName() {
+                return "地址";
+            }
+        };
+
+        public final Code PORT = new Code() {
+            @Override
+            public String getCode() {
+                return "PORT";
+            }
+
+            @Override
+            public String getName() {
+                return "端口";
+            }
+        };
+
+        public final Code SID = new Code() {
+            @Override
+            public String getCode() {
+                return "SID";
+            }
+
+            @Override
+            public String getName() {
+                return "SID";
+            }
+        };
+
+        public final Code USERNAME = new Code() {
+            @Override
+            public String getCode() {
+                return "USERNAME";
+            }
+
+            @Override
+            public String getName() {
+                return "密码";
+            }
+        };
+
+        public final Code PASSWORD = new Code() {
+            @Override
+            public String getCode() {
+                return "PASSWORD";
+            }
+
+            @Override
+            public String getName() {
+                return "密码";
+            }
+        };
+
+        @Override
+        public String getCode() {
+            return "SWGD_DATABASE";
         }
 
+        @Override
+        public String getName() {
+            return "SWGD数据库";
+        }
+    }
+
+    // 上传报关单回执
+    public static final class UPLOAD_CUS_RESULT implements Group {
+        public final Code FTP_TYPE = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_TYPE";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp类型";
+            }
+        };
+
+        public final Code FTP_HOST = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_HOST";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp地址";
+            }
+        };
+
+        public final Code FTP_PORT = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_PORT";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp端口";
+            }
+        };
+
+        public final Code FTP_USERNAME = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_USERNAME";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp用户名";
+            }
+        };
+
+        public final Code FTP_PASSWORD = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_PASSWORD";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp密码";
+            }
+        };
+
+        public final Code FTP_UPLOAD_PATH = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_UPLOAD_PATH";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp上传路径";
+            }
+        };
+
+        @Override
+        public String getCode() {
+            return "UPLOAD_CUS_RESULT";
+        }
+
+        @Override
+        public String getName() {
+            return "上传报关单回执";
+        }
+    }
+
+    // 上传代理委托回执
+    public static final class UPLOAD_AGENT_RESULT implements Group {
+        public final Code FTP_TYPE = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_TYPE";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp类型";
+            }
+        };
+
+        public final Code FTP_HOST = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_HOST";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp地址";
+            }
+        };
+
+        public final Code FTP_PORT = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_PORT";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp端口";
+            }
+        };
+
+        public final Code FTP_USERNAME = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_USERNAME";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp用户名";
+            }
+        };
+
+        public final Code FTP_PASSWORD = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_PASSWORD";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp密码";
+            }
+        };
+
+        public final Code FTP_UPLOAD_PATH = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_UPLOAD_PATH";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp上传路径";
+            }
+        };
+
+        @Override
+        public String getCode() {
+            return "UPLOAD_AGENT_RESULT";
+        }
+
+        @Override
+        public String getName() {
+            return "上传代理委托回执";
+        }
+    }
+
+    // 上传转关单回执
+    public static final class UPLOAD_TRANS_RESULT implements Group {
+        public final Code FTP_TYPE = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_TYPE";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp类型";
+            }
+        };
+
+        public final Code FTP_HOST = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_HOST";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp地址";
+            }
+        };
+
+        public final Code FTP_PORT = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_PORT";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp端口";
+            }
+        };
+
+        public final Code FTP_USERNAME = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_USERNAME";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp用户名";
+            }
+        };
+
+        public final Code FTP_PASSWORD = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_PASSWORD";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp密码";
+            }
+        };
+
+        public final Code FTP_UPLOAD_PATH = new Code() {
+            @Override
+            public String getCode() {
+                return "FTP_UPLOAD_PATH";
+            }
+
+            @Override
+            public String getName() {
+                return "ftp上传路径";
+            }
+        };
+
+        @Override
+        public String getCode() {
+            return "UPLOAD_TRANS_RESULT";
+        }
+
+        @Override
+        public String getName() {
+            return "上传转关单回执";
+        }
+    }
+
+    // SELENIUM
+    public static final class SELENIUM implements Group {
+        public final Code SERVER = new Code() {
+            @Override
+            public String getCode() {
+                return "SERVER";
+            }
+
+            @Override
+            public String getName() {
+                return "服务地址";
+            }
+        };
+
+        public final Code IS_SHOW = new Code() {
+            @Override
+            public String getCode() {
+                return "IS_SHOW";
+            }
+
+            @Override
+            public String getName() {
+                return "是否显示浏览器";
+            }
+        };
+
+        @Override
+        public String getCode() {
+            return "SELENIUM";
+        }
+
+        @Override
+        public String getName() {
+            return "selenium";
+        }
+    }
+
+    public interface Group {
+        String getCode();
+
+        String getName();
+    }
+
+    public interface Code {
+        String getCode();
+
+        String getName();
     }
 
 }
