@@ -14,15 +14,7 @@ export default {
         return baseApi.send({
             url: `${u}/save`,
             type: "POST",
-            data: data,
-            check: {
-                data: {
-                    id: Number,
-                    code: String,
-                    note: String,
-                    data: String
-                }
-            }
+            data: data
         });
     }
 };

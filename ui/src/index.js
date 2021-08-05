@@ -9,6 +9,7 @@ import addUser from "./view/addUser.vue";
 import thirdParty from "./view/thirdParty.vue";
 import config from "./view/config.vue";
 import agentResult from "./view/agentResult.vue";
+import transResult from "./view/transResult.vue";
 
 new Vue({
     el: "#main",
@@ -35,6 +36,13 @@ new Vue({
                 component: agentResult,
                 meta: {
                     title:"代理委托回执"
+                }
+            },
+            {
+                path: "/transResult",
+                component: transResult,
+                meta: {
+                    title:"转关单回执"
                 }
             },
             {

@@ -17,7 +17,7 @@
 
             <div style="margin-top: 20px;">
                 code
-                <ep-select style="margin-top: 10px;" v-model="tongXunCusResult.code">
+                <ep-select :disabled="!tongXunCusResult.display" style="margin-top: 10px;" v-model="tongXunCusResult.code">
                     <ep-select-item index="0" label="0 [成功]"></ep-select-item>
                     <ep-select-item index="1" label="1 [失败]"></ep-select-item>
                 </ep-select>

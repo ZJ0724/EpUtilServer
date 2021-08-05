@@ -3,6 +3,7 @@ package com.easipass.util.controller;
 import com.easipass.util.entity.CusResult;
 import com.easipass.util.service.CusResultService;
 import com.zj0724.common.exception.InfoException;
+import com.zj0724.common.util.MapUtil;
 import com.zj0724.common.util.ObjectUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +39,19 @@ public final class CusResultController {
 
         cusResultService.uploadAgentResult(customsDeclarationNumber, cusResult);
 
+        return Response.returnTrue();
+    }
+
+    @PostMapping("uploadTransResult")
+    public Response uploadTransResult(@RequestBody(required = false) Map<String, Object> requestBody) {
+        if (requestBody == null) {
+            throw new InfoException("请求参数缺失");
+        }
+
+        String copSeqNo = MapUtil.getValue(requestBody, "copSeqNo", String.class);
+        CusResult tongXun = MapUtil.getValue(requestBody, "tongXun", CusResult.class);
+        CusResult yeWu = MapUtil.getValue(requestBody, "yeWu", CusResult.class);
+        cusResultService.uploadTransResult(copSeqNo, tongXun, yeWu);
         return Response.returnTrue();
     }
 

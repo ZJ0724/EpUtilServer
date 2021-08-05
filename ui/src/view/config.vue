@@ -1,81 +1,93 @@
 <template>
     <div v-loading="loading">
         <div class="panel">
-            <ep-table :data="configs">
-                <ep-table-item column="code" title="code"></ep-table-item>
-                <ep-table-item column="note" title="备注"></ep-table-item>
-                <ep-table-item column="data" title="值"></ep-table-item>
-                <ep-table-item column="action" title="操作">
-                    <template slot-scope="props">
-                        <ep-button @click="configUpdatePopup.open(props.row)" type="text">编辑</ep-button>
-                    </template>
-                </ep-table-item>
-            </ep-table>
+            <ep-tabs v-model="selectGroup" layout="left">
+                <ep-tab-item v-for="(item, key) in configs" :key="key" :name="item.group" :label="item.groupName">
+                    <div style="padding: 10px;">
+                        <div class="title">
+                            {{item.groupName}}
+                        </div>
+
+                        <div v-for="(i, k) in item.codes" :key="k" style="margin-top: 20px;">
+                            <div>
+                                {{i.codeName}}
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <ep-input v-model="i.data"></ep-input>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <ep-button @click="() => {
+                                loading = true;
+                                save = item.codes;
+                                saveApi().then(() => {
+                                    alterUtil.success('完成');
+                                    getConfigApi();
+                                }).catch((m) => {
+                                    alterUtil.error(m);
+                                }).finally(() => {
+                                    loading = false;
+                                });
+                            }" style="width: 100%;" type="success">保存</ep-button>
+                        </div>
+                    </div>
+                </ep-tab-item>
+            </ep-tabs>
         </div>
-
-        <!-- 编辑弹框 -->
-        <ep-modal title="编辑" v-model="configUpdatePopup.show" width="500px">
-            <div v-loading="configUpdatePopup.loading">
-                <div style="display: flex;">
-                    <div style="white-space: normal;display: flex;align-items: center;">
-                        值
-                    </div>
-                    <div style="width: 100%;margin-left: 20px;">
-                        <ep-input v-model="save.data" size="small" style="width: 100%;"></ep-input>
-                    </div>
-                </div>
-
-                <div style="margin-top: 20px;">
-                    <ep-button @click="saveAction()" size="small" type="primary" style="width: 100%;">确定</ep-button>
-                </div>
-            </div>
-        </ep-modal>
     </div>
 </template>
 
 <script>
     import configApi from "../api/configApi.js";
-    import {variable} from "../util/zj0724common.js";
     import alterUtil from "../util/alterUtil.js";
 
     export default {
         name: "config.vue",
 
         data() {
-            let current = this;
-
             return {
                 loading: false,
 
-                configs: [],
+                selectGroup: null,
 
-                save: {
-                    id: null,
-                    code: null,
-                    note: null,
-                    data: null
-                },
+                configs: [
+                    // {
+                    //     group: "",
+                    //     groupName: "",
+                    //     codes: []
+                    // }
+                ],
 
-                configUpdatePopup: {
-                    show: false,
+                save: [],
 
-                    loading: false,
-
-                    open(data) {
-                        this.show = true;
-                        variable.assignment(current.save, data);
-                    }
-                }
+                alterUtil
             };
         },
 
         methods: {
-            getConfigApi() {
-                this.loading = true;
-                configApi.getAll().then((data) => {
-                    this.configs = data;
-                }).finally(() => {
-                    this.loading = false;
+            async getConfigApi() {
+                await configApi.getAll().then((data) => {
+                    this.configs = [];
+                    for (let item of data) {
+                        let group = {
+                            group: item.group,
+                            groupName: item.groupName,
+                            codes: []
+                        };
+                        let isPush = true;
+                        for (let c of this.configs) {
+                            if (c.group === item.group) {
+                                group = c;
+                                isPush = false;
+                                break;
+                            }
+                        }
+                        group.codes.push(item);
+                        if (isPush) {
+                            this.configs.push(group);
+                        }
+                    }
                 });
             },
 
@@ -99,8 +111,11 @@
             }
         },
 
-        created() {
-            this.getConfigApi();
+        async created() {
+            this.loading = true;
+            await this.getConfigApi();
+            this.selectGroup = this.configs[0].group;
+            this.loading = false;
         }
     }
 </script>

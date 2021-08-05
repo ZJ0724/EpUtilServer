@@ -7,7 +7,10 @@ import com.easipass.util.service.CusResultService;
 import com.easipass.util.util.ChromeDriverUtil;
 import com.easipass.util.util.SWGDDatabaseUtil;
 import com.easipass.util.util.SftpUtil;
+import com.zj0724.common.component.Ftp;
+import com.zj0724.common.component.Jdbc;
 import com.zj0724.common.component.ftp.Sftp;
+import com.zj0724.common.component.jdbc.OracleJdbc;
 import com.zj0724.common.exception.InfoException;
 import com.zj0724.common.util.Base64Util;
 import com.zj0724.common.util.DateUtil;
@@ -17,6 +20,7 @@ import com.zj0724.uiAuto.WebDriver;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -38,7 +42,7 @@ public final class CusResultServiceImpl implements CusResultService {
         }
 
         // 回执上传地址
-        ConfigPO uploadPathConfigPO = configService.getByCode(ConfigPO.Code.UPLOAD_CUS_RESULT_SFTP_PATH);
+        ConfigPO uploadPathConfigPO = configService.getByCode(ConfigPO.Groups.UPLOAD_CUS_RESULT.FTP_UPLOAD_PATH);
         if (uploadPathConfigPO == null || StringUtil.isEmpty(uploadPathConfigPO.getData())) {
             throw new InfoException("上传回执路径未配置");
         }
@@ -84,7 +88,7 @@ public final class CusResultServiceImpl implements CusResultService {
         }
 
         // 获取代理委托上传路径
-        ConfigPO configPO = configService.getByCode(ConfigPO.Code.UPLOAD_AGENT_RESULT_SFTP_PATH);
+        ConfigPO configPO = configService.getByCode(ConfigPO.Groups.UPLOAD_AGENT_RESULT.FTP_UPLOAD_PATH);
         String agentUploadPath = null;
         if (configPO != null) {
             agentUploadPath = configPO.getData();
@@ -146,6 +150,118 @@ public final class CusResultServiceImpl implements CusResultService {
             ChromeDriverUtil.agentRun(webDriver);
         } finally {
             webDriver.close();
+        }
+    }
+
+    @Override
+    public void uploadTransResult(String copSeqNo, CusResult tongXun, CusResult yeWu) {
+        if (StringUtil.isEmpty(copSeqNo)) {
+            throw new InfoException("企业内部编号不能为空");
+        }
+
+        // 获取ftp上传路径
+        ConfigPO FTP_UPLOAD_PATH = configService.getByCode(ConfigPO.Groups.UPLOAD_TRANS_RESULT.FTP_UPLOAD_PATH);
+        if (FTP_UPLOAD_PATH == null || StringUtil.isEmpty(FTP_UPLOAD_PATH.getData())) {
+            throw new InfoException("ftp上传路径不能为空");
+        }
+
+        Jdbc jdbc = null;
+        Ftp ftp = null;
+        WebDriver webDriver = ChromeDriverUtil.getChromeDriver();
+        try {
+            // 连接ftp
+            ConfigPO FTP_TYPE = configService.getByCode(ConfigPO.Groups.UPLOAD_TRANS_RESULT.FTP_TYPE);
+            ConfigPO FTP_HOST = configService.getByCode(ConfigPO.Groups.UPLOAD_TRANS_RESULT.FTP_HOST);
+            ConfigPO FTP_PORT = configService.getByCode(ConfigPO.Groups.UPLOAD_TRANS_RESULT.FTP_PORT);
+            ConfigPO FTP_USERNAME = configService.getByCode(ConfigPO.Groups.UPLOAD_TRANS_RESULT.FTP_USERNAME);
+            ConfigPO FTP_PASSWORD = configService.getByCode(ConfigPO.Groups.UPLOAD_TRANS_RESULT.FTP_PASSWORD);
+            if (StringUtil.isEmpty(FTP_TYPE)) {
+                throw new InfoException("ftp类型不能为空");
+            }
+            if ("FTP".equals(FTP_TYPE.getData())) {
+                ftp = new com.zj0724.common.component.ftp.Ftp(FTP_HOST.getData(), Integer.parseInt(FTP_PORT.getData()), FTP_USERNAME.getData(), FTP_PASSWORD.getData());
+            } else if ("SFTP".equals(FTP_TYPE.getData())) {
+                ftp = new Sftp(FTP_HOST.getData(), Integer.parseInt(FTP_PORT.getData()), FTP_USERNAME.getData(), FTP_PASSWORD.getData());
+            } else {
+                throw new InfoException("ftp类型错误");
+            }
+
+            // 连接数据库
+            ConfigPO DATABASE_HOST = configService.getByCode(ConfigPO.Groups.UPLOAD_TRANS_RESULT.DATABASE_HOST);
+            ConfigPO DATABASE_PORT = configService.getByCode(ConfigPO.Groups.UPLOAD_TRANS_RESULT.DATABASE_PORT);
+            ConfigPO DATABASE_SID = configService.getByCode(ConfigPO.Groups.UPLOAD_TRANS_RESULT.DATABASE_SID);
+            ConfigPO DATABASE_USERNAME = configService.getByCode(ConfigPO.Groups.UPLOAD_TRANS_RESULT.DATABASE_USERNAME);
+            ConfigPO DATABASE_PASSWORD = configService.getByCode(ConfigPO.Groups.UPLOAD_TRANS_RESULT.DATABASE_PASSWORD);
+            jdbc = new OracleJdbc(DATABASE_HOST.getData(), Integer.parseInt(DATABASE_PORT.getData()), DATABASE_SID.getData(), DATABASE_USERNAME.getData(), DATABASE_PASSWORD.getData());
+
+            // 上传通讯回执
+            if (tongXun != null) {
+                // 查询TRANS_PRE_ID
+                List<Map<String, Object>> maps = jdbc.queryBySql("SELECT TRANS_PRE_ID FROM SWGDIMAP.TRANS_PRE_HEAD WHERE COP_SEQ_NO = '" + copSeqNo + "'");
+                if (maps.size() == 0) {
+                    throw new InfoException(copSeqNo + "数据未找到");
+                }
+                if (maps.size() > 1) {
+                    throw new InfoException(copSeqNo + "存在多条数据");
+                }
+                String TRANS_PRE_ID = MapUtil.getValue(maps.get(0), "TRANS_PRE_ID", String.class);
+                if (StringUtil.isEmpty(TRANS_PRE_ID)) {
+                    TRANS_PRE_ID = "SEQ_NO_" + copSeqNo;
+                }
+                String data = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                        "<TrnImportResponse xmlns=\"http://www.chinaport.gov.cn/trn\">\n" +
+                        "\t<EportResult>\n" +
+                        "\t\t<SeqNo>" + TRANS_PRE_ID + "</SeqNo>\n" +
+                        "\t\t<CopSeqNo>" + copSeqNo + "</CopSeqNo>\n" +
+                        "\t\t<ResponseCode>" + tongXun.getCode() + "</ResponseCode>\n" +
+                        "\t\t<ResponseMessage>" + tongXun.getNote() + "</ResponseMessage>\n" +
+                        "\t</EportResult>\n" +
+                        "</TrnImportResponse>";
+                ftp.upload(FTP_UPLOAD_PATH.getData(), "trans-tongXun-" + DateUtil.format(new Date(), "yyyyMMddHHmmss") + ".xml", data);
+                ChromeDriverUtil.transRun(webDriver);
+            }
+
+            // 上传业务回执
+            if (yeWu != null) {
+                // 查询TRANS_PRE_ID, PRE_NO
+                List<Map<String, Object>> maps = jdbc.queryBySql("SELECT TRANS_PRE_ID, PRE_NO FROM SWGDIMAP.TRANS_PRE_HEAD WHERE COP_SEQ_NO = '" + copSeqNo + "'");
+                if (maps.size() == 0) {
+                    throw new InfoException(copSeqNo + "数据未找到");
+                }
+                if (maps.size() > 1) {
+                    throw new InfoException(copSeqNo + "存在多条数据");
+                }
+                String TRANS_PRE_ID = MapUtil.getValue(maps.get(0), "TRANS_PRE_ID", String.class);
+                if (StringUtil.isEmpty(TRANS_PRE_ID)) {
+                    TRANS_PRE_ID = "SEQ_NO_" + copSeqNo;
+                }
+                String PRE_NO = MapUtil.getValue(maps.get(0), "PRE_NO", String.class);
+                if (StringUtil.isEmpty(PRE_NO)) {
+                    PRE_NO = "TRANS_NO_" + copSeqNo;
+                }
+                String data = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                        "<TrnImportResponse xmlns=\"http://www.chinaport.gov.cn/trn\">\n" +
+                        "\t<EportResult>\n" +
+                        "\t\t<SeqNo>" + TRANS_PRE_ID + "</SeqNo>\n" +
+                        "\t</EportResult>\n" +
+                        "\t<CusResult>\n" +
+                        "\t\t<TransNo>" + PRE_NO + "</TransNo>\n" +
+                        "\t\t<NoticeDate>" + DateUtil.format(new Date(), "yyyyMMddHHmmss") + "</NoticeDate>\n" +
+                        "\t\t<Channel>" + yeWu.getCode() + "</Channel>\n" +
+                        "\t\t<Note>" + yeWu.getNote() + "</Note>\n" +
+                        "\t</CusResult>\n" +
+                        "</TrnImportResponse>";
+                ftp.upload(FTP_UPLOAD_PATH.getData(), "trans-yeWu-" + DateUtil.format(new Date(), "yyyyMMddHHmmss") + ".xml", data);
+                ChromeDriverUtil.transRun(webDriver);
+            }
+        } finally {
+            webDriver.close();
+            if (ftp !=null) {
+                ftp.close();
+            }
+            if (jdbc != null) {
+                jdbc.close();
+            }
         }
     }
 

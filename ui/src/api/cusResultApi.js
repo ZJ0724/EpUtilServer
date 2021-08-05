@@ -39,5 +39,26 @@ export default {
                 }
             }
         });
+    },
+
+    uploadTransResult(data) {
+        return baseApi.send({
+            url: `${u}/uploadTransResult`,
+            type: "POST",
+            data: data,
+            check: {
+                data: {
+                    copSeqNo: String,
+                    tongXun: {
+                        code: String,
+                        note: String
+                    },
+                    yeWu: {
+                        code: String,
+                        note: String
+                    }
+                }
+            }
+        });
     }
 };

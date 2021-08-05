@@ -11,10 +11,10 @@ public final class SftpUtil {
 
     public static Sftp getUploadCusResultSftp() {
         ConfigService configService = Main.APPLICATION_CONTEXT.getBean(ConfigService.class);
-        ConfigPO ftpHost = configService.getByCode(ConfigPO.Code.UPLOAD_CUS_RESULT_SFTP_HOST);
-        ConfigPO ftpPort = configService.getByCode(ConfigPO.Code.UPLOAD_CUS_RESULT_SFTP_PORT);
-        ConfigPO ftpUsername = configService.getByCode(ConfigPO.Code.UPLOAD_CUS_RESULT_SFTP_USERNAME);
-        ConfigPO ftpPassword = configService.getByCode(ConfigPO.Code.UPLOAD_CUS_RESULT_SFTP_PASSWORD);
+        ConfigPO ftpHost = configService.getByCode(ConfigPO.Groups.UPLOAD_CUS_RESULT.FTP_HOST);
+        ConfigPO ftpPort = configService.getByCode(ConfigPO.Groups.UPLOAD_CUS_RESULT.FTP_PORT);
+        ConfigPO ftpUsername = configService.getByCode(ConfigPO.Groups.UPLOAD_CUS_RESULT.FTP_USERNAME);
+        ConfigPO ftpPassword = configService.getByCode(ConfigPO.Groups.UPLOAD_CUS_RESULT.FTP_PASSWORD);
         if (ftpHost == null || StringUtil.isEmpty(ftpHost.getData())) {
             throw new InfoException("上传回执ftp地址未配置");
         }

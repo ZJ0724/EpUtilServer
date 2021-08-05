@@ -83,11 +83,11 @@ public final class SWGDDatabaseUtil {
 
     private static Jdbc getJdbc() {
         ConfigService configService = Main.APPLICATION_CONTEXT.getBean(ConfigService.class);
-        ConfigPO hostConfigPO = configService.getByCode(ConfigPO.Code.SWGD_DATABASE_HOST);
-        ConfigPO portConfigPO = configService.getByCode(ConfigPO.Code.SWGD_DATABASE_PORT);
-        ConfigPO sidConfigPO = configService.getByCode(ConfigPO.Code.SWGD_DATABASE_SID);
-        ConfigPO usernameConfigPO = configService.getByCode(ConfigPO.Code.SWGD_DATABASE_USERNAME);
-        ConfigPO passwordConfigPO = configService.getByCode(ConfigPO.Code.SWGD_DATABASE_PASSWORD);
+        ConfigPO hostConfigPO = configService.getByCode(ConfigPO.Groups.SWGD_DATABASE.HOST);
+        ConfigPO portConfigPO = configService.getByCode(ConfigPO.Groups.SWGD_DATABASE.PORT);
+        ConfigPO sidConfigPO = configService.getByCode(ConfigPO.Groups.SWGD_DATABASE.SID);
+        ConfigPO usernameConfigPO = configService.getByCode(ConfigPO.Groups.SWGD_DATABASE.USERNAME);
+        ConfigPO passwordConfigPO = configService.getByCode(ConfigPO.Groups.SWGD_DATABASE.PASSWORD);
         if (hostConfigPO == null || StringUtil.isEmpty(hostConfigPO.getData())) {
             throw new InfoException("SWGD数据库地址未配置");
         }

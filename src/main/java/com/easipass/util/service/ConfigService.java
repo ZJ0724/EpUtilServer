@@ -10,11 +10,12 @@ public interface ConfigService {
     /**
      * 获取配置
      *
+     * @param group group
      * @param code code
      *
      * @return ConfigPO
      * */
-    ConfigPO getByCode(String code);
+    ConfigPO getByCode(String group, String code);
 
     ConfigPO getByCode(ConfigPO.Code code);
 
@@ -31,5 +32,12 @@ public interface ConfigService {
      * @param configPO configPO
      * */
     void save(ConfigPO configPO);
+
+    /**
+     * 保存
+     *
+     * @param configPOList configPOList
+     * */
+    void save(List<ConfigPO> configPOList);
 
 }

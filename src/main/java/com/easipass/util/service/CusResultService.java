@@ -22,4 +22,13 @@ public interface CusResultService {
      * */
     void uploadAgentResult(String customsDeclarationNumber, CusResult cusResult);
 
+    /**
+     * 上传转关单回执
+     *
+     * @param copSeqNo 企业内部编号
+     * @param tongXun 通讯回执
+     * @param yeWu 业务回执
+     * */
+    void uploadTransResult(String copSeqNo, CusResult tongXun, CusResult yeWu);
+
 }

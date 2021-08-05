@@ -16,7 +16,7 @@ public final class ChromeDriverUtil {
     public static WebDriver getChromeDriver() {
         ConfigService configService = Main.APPLICATION_CONTEXT.getBean(ConfigService.class);
 
-        ConfigPO configPO = configService.getByCode(ConfigPO.Code.SELENIUM_SERVER);
+        ConfigPO configPO = configService.getByCode(ConfigPO.Groups.SELENIUM.SERVER);
         if (configPO == null) {
             throw new InfoException("selenium服务地址未配置");
         }
@@ -26,7 +26,7 @@ public final class ChromeDriverUtil {
         }
 
         boolean isShow = false;
-        ConfigPO byCode = configService.getByCode(ConfigPO.Code.SELENIUM_IS_SHOW);
+        ConfigPO byCode = configService.getByCode(ConfigPO.Groups.SELENIUM.IS_SHOW);
         if (byCode != null) {
             isShow = "1".equals(byCode.getData());
         }
@@ -72,6 +72,26 @@ public final class ChromeDriverUtil {
             webDriver.findElement(Selector.byCssSelector("#gwt-uid-26 > span")).click();
             webDriver.findElement(Selector.byCssSelector("body > table > tbody > tr:nth-child(1) > td > table > tbody > tr > td:nth-child(3) > table > tbody > tr > td:nth-child(2) > div > img")).click();
             webDriver.findElement(Selector.byCssSelector("body > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > div > div > div:nth-child(3) > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td > div > div > table > tbody > tr:nth-child(2) > td > div > div:nth-child(1) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(20) > td:nth-child(4) > table > tbody > tr > td:nth-child(3) > button")).click();
+        } catch (Exception e) {
+            throw new InfoException(e.getMessage());
+        }
+    }
+
+    /**
+     * 上传转关回执
+     *
+     * @param webDriver webDriver
+     * */
+    public static void transRun(WebDriver webDriver) {
+        try {
+            webDriver.open("http://192.168.120.83:9909/console");
+            webDriver.findElement(Selector.byCssSelector("body > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(1) > td:nth-child(2) > input")).sendKey("admin");
+            webDriver.findElement(Selector.byCssSelector("body > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td:nth-child(2) > input")).sendKey("admin");
+            webDriver.findElement(Selector.byCssSelector("body > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(3) > td > button")).click();
+            webDriver.findElement(Selector.byCssSelector("body > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > div > div > div:nth-child(1) > table > tbody > tr > td > div > div:nth-child(2) > div > div:nth-child(2) > table > tbody > tr > td:nth-child(1) > img")).click();
+            webDriver.findElement(Selector.byCssSelector("#gwt-uid-26 > span")).click();
+            webDriver.findElement(Selector.byCssSelector("body > table > tbody > tr:nth-child(1) > td > table > tbody > tr > td:nth-child(3) > table > tbody > tr > td:nth-child(2) > div > img")).click();
+            webDriver.findElement(Selector.byCssSelector("body > table > tbody > tr:nth-child(2) > td > table > tbody > tr > td > div > div > div:nth-child(3) > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td > div > div:nth-child(1) > table > tbody > tr:nth-child(2) > td > div > div:nth-child(1) > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(49) > td:nth-child(4) > table > tbody > tr > td:nth-child(3) > button")).click();
         } catch (Exception e) {
             throw new InfoException(e.getMessage());
         }

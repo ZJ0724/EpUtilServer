@@ -11,6 +11,7 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(Throwable.class)
     public Response throwable(Throwable e) {
+        e.printStackTrace();
         if (e instanceof InfoException) {
             return Response.returnFalse(ErrorCodeConfig.DEFAULT_INFO, e.getMessage());
         }

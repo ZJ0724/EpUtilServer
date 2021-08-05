@@ -2,6 +2,9 @@ package com.easipass.util.entity.po;
 
 import com.easipass.util.entity.AbstractPO;
 import com.zj0724.common.component.jdbc.AccessDatabaseJdbc.FieldType;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 配置
@@ -11,14 +14,17 @@ import com.zj0724.common.component.jdbc.AccessDatabaseJdbc.FieldType;
 @Table(name = "CONFIG")
 public final class ConfigPO extends AbstractPO {
 
-    @Column(name = "GROUP", type = FieldType.VARCHAR)
+    @Column(name = "GROUP_CODE", type = FieldType.VARCHAR)
     private String group;
+
+    @Column(name = "GROUP_NAME", type = FieldType.VARCHAR)
+    private String groupName;
 
     @Column(name = "CODE", type = FieldType.VARCHAR)
     private String code;
 
-    @Column(name = "NOTE", type = FieldType.VARCHAR)
-    private String note;
+    @Column(name = "CODE_NAME", type = FieldType.VARCHAR)
+    private String codeName;
 
     @Column(name = "DATA", type = FieldType.VARCHAR)
     private String data;
@@ -31,6 +37,14 @@ public final class ConfigPO extends AbstractPO {
         this.group = group;
     }
 
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
     public String getCode() {
         return code;
     }
@@ -39,12 +53,12 @@ public final class ConfigPO extends AbstractPO {
         this.code = code;
     }
 
-    public String getNote() {
-        return note;
+    public String getCodeName() {
+        return codeName;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setCodeName(String codeName) {
+        this.codeName = codeName;
     }
 
     public String getData() {
@@ -56,15 +70,22 @@ public final class ConfigPO extends AbstractPO {
     }
 
     public static final class Groups {
-        public static final SWGD_DATABASE SWGD_DATABASE = new SWGD_DATABASE();
-        public static final UPLOAD_CUS_RESULT UPLOAD_CUS_RESULT = new UPLOAD_CUS_RESULT();
-        public static final UPLOAD_AGENT_RESULT UPLOAD_AGENT_RESULT = new UPLOAD_AGENT_RESULT();
-        public static final UPLOAD_TRANS_RESULT UPLOAD_TRANS_RESULT = new UPLOAD_TRANS_RESULT();
-        public static final SELENIUM SELENIUM = new SELENIUM();
+
+        public static final SWGD_DATABASE SWGD_DATABASE = new ConfigPO.SWGD_DATABASE();
+
+        public static final UPLOAD_CUS_RESULT UPLOAD_CUS_RESULT = new ConfigPO.UPLOAD_CUS_RESULT();
+
+        public static final UPLOAD_AGENT_RESULT UPLOAD_AGENT_RESULT = new ConfigPO.UPLOAD_AGENT_RESULT();
+
+        public static final UPLOAD_TRANS_RESULT UPLOAD_TRANS_RESULT = new ConfigPO.UPLOAD_TRANS_RESULT();
+
+        public static final SELENIUM SELENIUM = new ConfigPO.SELENIUM();
+
     }
 
     // SWGD_DATABASE
     public static final class SWGD_DATABASE implements Group {
+
         public final Code HOST = new Code() {
             @Override
             public String getCode() {
@@ -124,7 +145,7 @@ public final class ConfigPO extends AbstractPO {
 
             @Override
             public String getName() {
-                return "密码";
+                return "账号";
             }
 
             @Override
@@ -159,10 +180,22 @@ public final class ConfigPO extends AbstractPO {
         public String getName() {
             return "SWGD数据库";
         }
+
+        @Override
+        public List<Code> codes() {
+            List<Code> codes = new LinkedList<>();
+            codes.add(HOST);
+            codes.add(PORT);
+            codes.add(SID);
+            codes.add(USERNAME);
+            codes.add(PASSWORD);
+            return codes;
+        }
     }
 
     // 上传报关单回执
     public static final class UPLOAD_CUS_RESULT implements Group {
+
         public final Code FTP_TYPE = new Code() {
             @Override
             public String getCode() {
@@ -274,10 +307,24 @@ public final class ConfigPO extends AbstractPO {
         public String getName() {
             return "上传报关单回执";
         }
+
+        @Override
+        public List<Code> codes() {
+            List<Code> codes = new ArrayList<>();
+            codes.add(FTP_TYPE);
+            codes.add(FTP_HOST);
+            codes.add(FTP_PORT);
+            codes.add(FTP_USERNAME);
+            codes.add(FTP_PASSWORD);
+            codes.add(FTP_UPLOAD_PATH);
+            return codes;
+        }
+
     }
 
     // 上传代理委托回执
     public static final class UPLOAD_AGENT_RESULT implements Group {
+
         public final Code FTP_TYPE = new Code() {
             @Override
             public String getCode() {
@@ -389,10 +436,109 @@ public final class ConfigPO extends AbstractPO {
         public String getName() {
             return "上传代理委托回执";
         }
+
+        @Override
+        public List<Code> codes() {
+            List<Code> codes = new ArrayList<>();
+            codes.add(FTP_TYPE);
+            codes.add(FTP_HOST);
+            codes.add(FTP_PORT);
+            codes.add(FTP_USERNAME);
+            codes.add(FTP_PASSWORD);
+            codes.add(FTP_UPLOAD_PATH);
+            return codes;
+        }
+
     }
 
     // 上传转关单回执
     public static final class UPLOAD_TRANS_RESULT implements Group {
+
+        public final Code DATABASE_HOST = new Code() {
+            @Override
+            public String getCode() {
+                return "DATABASE_HOST";
+            }
+
+            @Override
+            public String getName() {
+                return "数据库地址";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_TRANS_RESULT;
+            }
+        };
+
+        public final Code DATABASE_PORT = new Code() {
+            @Override
+            public String getCode() {
+                return "DATABASE_PORT";
+            }
+
+            @Override
+            public String getName() {
+                return "数据库端口";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_TRANS_RESULT;
+            }
+        };
+
+        public final Code DATABASE_SID = new Code() {
+            @Override
+            public String getCode() {
+                return "DATABASE_SID";
+            }
+
+            @Override
+            public String getName() {
+                return "数据库SID";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_TRANS_RESULT;
+            }
+        };
+
+        public final Code DATABASE_USERNAME = new Code() {
+            @Override
+            public String getCode() {
+                return "DATABASE_USERNAME";
+            }
+
+            @Override
+            public String getName() {
+                return "数据库用户名";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_TRANS_RESULT;
+            }
+        };
+
+        public final Code DATABASE_PASSWORD = new Code() {
+            @Override
+            public String getCode() {
+                return "DATABASE_PASSWORD";
+            }
+
+            @Override
+            public String getName() {
+                return "数据库密码";
+            }
+
+            @Override
+            public Group getGroup() {
+                return Groups.UPLOAD_TRANS_RESULT;
+            }
+        };
+
         public final Code FTP_TYPE = new Code() {
             @Override
             public String getCode() {
@@ -504,10 +650,29 @@ public final class ConfigPO extends AbstractPO {
         public String getName() {
             return "上传转关单回执";
         }
+
+        @Override
+        public List<Code> codes() {
+            List<Code> codes = new ArrayList<>();
+            codes.add(DATABASE_HOST);
+            codes.add(DATABASE_PORT);
+            codes.add(DATABASE_SID);
+            codes.add(DATABASE_USERNAME);
+            codes.add(DATABASE_PASSWORD);
+            codes.add(FTP_TYPE);
+            codes.add(FTP_HOST);
+            codes.add(FTP_PORT);
+            codes.add(FTP_USERNAME);
+            codes.add(FTP_PASSWORD);
+            codes.add(FTP_UPLOAD_PATH);
+            return codes;
+        }
+
     }
 
     // SELENIUM
     public static final class SELENIUM implements Group {
+
         public final Code SERVER = new Code() {
             @Override
             public String getCode() {
@@ -551,12 +716,23 @@ public final class ConfigPO extends AbstractPO {
         public String getName() {
             return "selenium";
         }
+
+        @Override
+        public List<Code> codes() {
+            List<Code> codes = new ArrayList<>();
+            codes.add(SERVER);
+            codes.add(IS_SHOW);
+            return codes;
+        }
+
     }
 
     public interface Group {
         String getCode();
 
         String getName();
+
+        List<Code> codes();
     }
 
     public interface Code {
