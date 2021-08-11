@@ -8,9 +8,9 @@ public final class BaseConfig {
 
     public static final String ROOT_PATH = System.getProperty("user.dir");
 
-//    public static final String CACHE_PATH = System.getProperty("user.home") + "/." + PROJECT_NAME;
+    public static final String CACHE_PATH = System.getProperty("user.home") + "/." + PROJECT_NAME;
 
-    public static final String CACHE_PATH = "\\\\192.168.1.108\\Users\\ZJ\\.ep-util";
+//    public static final String CACHE_PATH = "\\\\192.168.1.108\\Users\\ZJ\\.ep-util";
 
     public static final File DATABASE_FILE = new File(CACHE_PATH, "database.accdb");
 
