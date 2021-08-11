@@ -25,8 +25,8 @@ public final class ConfigServiceImpl implements ConfigService {
         }
         Database<ConfigPO> configPODatabase = Database.getDatabase(ConfigPO.class);
         Query query = new Query();
-        query.addFilter("GROUP_CODE", group);
-        query.addFilter("CODE", code);
+        query.addFilter("group", group);
+        query.addFilter("code", code);
         QueryResult<ConfigPO> query1 = configPODatabase.query(query);
         List<ConfigPO> data = query1.getData();
         if (data.size() > 1) {

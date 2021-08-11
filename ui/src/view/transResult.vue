@@ -65,7 +65,7 @@
 
 <script>
     import cusResultApi from "../api/cusResultApi.js";
-    import {variable} from "../util/zj0724common.js";
+    import {variable} from "../util/zj0724-common-1.0.0.js";
     import alterUtil from "../util/alterUtil.js";
 
     export default {

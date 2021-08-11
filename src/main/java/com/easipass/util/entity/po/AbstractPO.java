@@ -1,6 +1,5 @@
-package com.easipass.util.entity;
+package com.easipass.util.entity.po;
 
-import com.easipass.util.entity.po.Column;
 import com.zj0724.common.component.jdbc.AccessDatabaseJdbc;
 
 /**

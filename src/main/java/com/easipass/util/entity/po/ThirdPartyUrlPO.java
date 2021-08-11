@@ -1,6 +1,5 @@
 package com.easipass.util.entity.po;
 
-import com.easipass.util.entity.AbstractPO;
 import com.zj0724.common.component.jdbc.AccessDatabaseJdbc;
 
 @Table(name = "THIRD_PARTY_URL")

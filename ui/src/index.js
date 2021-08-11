@@ -10,6 +10,12 @@ import thirdParty from "./view/thirdParty.vue";
 import config from "./view/config.vue";
 import agentResult from "./view/agentResult.vue";
 import transResult from "./view/transResult.vue";
+import apiTest from "./view/apiTest.vue";
+
+// 组件
+import inputLabel from "./component/inputLabel.vue";
+
+Vue.component("inputLabel", inputLabel);
 
 new Vue({
     el: "#main",
@@ -54,6 +60,13 @@ new Vue({
                 component: thirdParty,
                 meta: {
                     title:"第三方接口调试"
+                }
+            },
+            {
+                path: "/apiTest",
+                component: apiTest,
+                meta: {
+                    title:"接口测试"
                 }
             },
             {

@@ -1,4 +1,5 @@
 @import "panel.css";
+@import "scrollbar.css";
 
 html, body, #main {
     width: 100%;

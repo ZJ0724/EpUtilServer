@@ -1,4 +1,4 @@
-import {http} from "../util/zj0724common.js";
+import {http} from "../util/zj0724-common-1.0.0.js";
 import baseConfig from "../config/baseConfig.js";
 
 export default {

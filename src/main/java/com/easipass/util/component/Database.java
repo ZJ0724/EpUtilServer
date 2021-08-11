@@ -1,7 +1,7 @@
 package com.easipass.util.component;
 
 import com.easipass.util.config.BaseConfig;
-import com.easipass.util.entity.AbstractPO;
+import com.easipass.util.entity.po.AbstractPO;
 import com.easipass.util.entity.po.Column;
 import com.easipass.util.entity.po.Table;
 import com.zj0724.common.component.jdbc.AccessDatabaseJdbc;
@@ -28,7 +28,7 @@ public final class Database<T extends AbstractPO> {
 
     static {
         if (!BaseConfig.DATABASE_FILE.exists()) {
-            AccessDatabaseJdbc.create(com.healthmarketscience.jackcess.Database.FileFormat.V2016, BaseConfig.DATABASE_FILE.getAbsolutePath()).close();
+            AccessDatabaseJdbc.create(BaseConfig.DATABASE_FILE.getPath(), BaseConfig.DATABASE_FILE.getName()).close();
         }
     }
 
@@ -51,7 +51,7 @@ public final class Database<T extends AbstractPO> {
             fieldTypeMap.put(annotation.name(), annotation.type());
         }
 
-        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE.getAbsolutePath());
+        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE);
         try {
             accessDatabaseJdbc.reloadTable(tableName, fieldTypeMap);
         } finally {
@@ -68,8 +68,15 @@ public final class Database<T extends AbstractPO> {
      * */
     public QueryResult<T> query(Query query) {
         QueryResult<T> queryResult = new QueryResult<>();
-        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE.getAbsolutePath());
+        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE);
         try {
+            if (query != null) {
+                Map<String, Object> filter = query.getFilter();
+                if (filter != null) {
+                    Map<String, Object> map = mapToColumn(filter, this.c);
+                    query.setFilter(map);
+                }
+            }
             QueryResult<Map<String, Object>> data = accessDatabaseJdbc.query(this.tableName, query);
             queryResult.setCount(data.getCount());
             List<T> tList = new ArrayList<>();
@@ -98,7 +105,7 @@ public final class Database<T extends AbstractPO> {
         if (t == null) {
             return;
         }
-        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE.getAbsolutePath());
+        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE);
         try {
             if (t.getId() == null) {
                 Map<String, Object> map = mapToColumn(ObjectUtil.parseMap(t), c);
@@ -106,10 +113,38 @@ public final class Database<T extends AbstractPO> {
                 String sql = SqlUtil.parseInsertSql(map, c.getAnnotation(Table.class).name());
                 accessDatabaseJdbc.execute(sql);
             } else {
-                update(t.getId(), t);
+                Query query = new Query();
+                query.addFilter("id", t.getId());
+                QueryResult<T> query1 = query(query);
+                if (query1.getCount() == 0) {
+                    Map<String, Object> map = mapToColumn(ObjectUtil.parseMap(t), c);
+                    String sql = SqlUtil.parseInsertSql(map, c.getAnnotation(Table.class).name());
+                    accessDatabaseJdbc.execute(sql);
+                } else {
+                    update(t.getId(), t);
+                }
             }
         } finally {
             accessDatabaseJdbc.close();
+        }
+    }
+
+    /**
+     * 保存
+     *
+     * @param tList tList
+     * */
+    public void save(List<T> tList) {
+        if (tList == null) {
+            return;
+        }
+        for (T t : tList) {
+            if (t.getId() != null) {
+                delete(t.getId());
+            }
+        }
+        for (T t : tList) {
+            save(t);
         }
     }
 
@@ -144,7 +179,7 @@ public final class Database<T extends AbstractPO> {
         sql = sql.substring(0, sql.length() - 2);
         sql = StringUtil.append(sql, " WHERE ID = " + id);
 
-        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE.getAbsolutePath());
+        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE);
         try {
             accessDatabaseJdbc.execute(sql);
         } finally {
@@ -153,19 +188,32 @@ public final class Database<T extends AbstractPO> {
     }
 
     /**
-     * 通过id删除
+     * 删除
      *
      * @param id id
      * */
-    public void deleteById(Long id) {
+    public void delete(Long id) {
         if (id == null) {
             throw new InfoException("id不能为空");
         }
-        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE.getAbsolutePath());
+        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE);
         try {
             accessDatabaseJdbc.execute("DELETE FROM " + tableName + " WHERE ID = " + id);
         } finally {
             accessDatabaseJdbc.close();
+        }
+    }
+
+    /**
+     * 删除
+     *
+     * @param tList tList
+     * */
+    public void delete(List<T> tList) {
+        for (T t : tList) {
+            if (t.getId() != null) {
+                delete(t.getId());
+            }
         }
     }
 
@@ -175,7 +223,7 @@ public final class Database<T extends AbstractPO> {
      * @return 下一个id
      * */
     private Long getNextId() {
-        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE.getAbsolutePath());
+        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE);
         try {
             List<Map<String, Object>> list = accessDatabaseJdbc.queryBySql("SELECT * FROM " + tableName + " ORDER BY ID DESC");
             if (list.size() == 0) {

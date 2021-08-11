@@ -1,6 +1,5 @@
 package com.easipass.util.entity.po;
 
-import com.easipass.util.entity.AbstractPO;
 import com.zj0724.common.component.jdbc.AccessDatabaseJdbc.FieldType;
 import java.util.ArrayList;
 import java.util.LinkedList;

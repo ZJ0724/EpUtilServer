@@ -127,7 +127,7 @@
     import thirdPartyApi from "../api/thirdPartyApi.js";
     import alterUtil from "../util/alterUtil.js";
     import thirdPartyUrlApi from "../api/thirdPartyUrlApi.js";
-    import {variable} from "../util/zj0724common.js";
+    import {variable} from "../util/zj0724-common-1.0.0.js";
 
     export default {
         name: "thirdParty.vue",

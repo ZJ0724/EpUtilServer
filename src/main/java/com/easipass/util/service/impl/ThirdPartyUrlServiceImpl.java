@@ -48,7 +48,7 @@ public final class ThirdPartyUrlServiceImpl implements ThirdPartyUrlService {
     @Override
     public void delete(Long id) {
         Database<ThirdPartyUrlPO> database = Database.getDatabase(ThirdPartyUrlPO.class);
-        database.deleteById(id);
+        database.delete(id);
     }
 
 }
