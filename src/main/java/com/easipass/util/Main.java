@@ -1,5 +1,6 @@
 package com.easipass.util;
 
+import com.easipass.util.component.Database;
 import com.easipass.util.entity.Port;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.Banner;
@@ -15,6 +16,9 @@ public class Main implements ApplicationContextAware {
     public static ApplicationContext APPLICATION_CONTEXT;
 
     public static void main(String[] args) {
+        // 加载database
+        Database.init();
+
         System.out.println("                        _   _ _ \n" +
                 "  ___ _ __        _   _| |_(_) |\n" +
                 " / _ \\ '_ \\ _____| | | | __| | |\n" +

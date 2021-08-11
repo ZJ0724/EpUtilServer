@@ -4,6 +4,7 @@ import com.easipass.util.config.BaseConfig;
 import com.easipass.util.entity.po.AbstractPO;
 import com.easipass.util.entity.po.Column;
 import com.easipass.util.entity.po.Table;
+import com.zj0724.common.component.Pool;
 import com.zj0724.common.component.jdbc.AccessDatabaseJdbc;
 import com.zj0724.common.entity.QueryResult;
 import com.zj0724.common.exception.InfoException;
@@ -18,6 +19,7 @@ import java.util.*;
  *
  * @author ZJ
  * */
+@SuppressWarnings("unchecked")
 public final class Database<T extends AbstractPO> {
 
     private final Class<T> c;
@@ -26,10 +28,30 @@ public final class Database<T extends AbstractPO> {
 
     private static final List<Database<? extends AbstractPO>> DATABASE_LIST = new ArrayList<>();
 
+    private static final Pool<AccessDatabaseJdbc> ACCESS_DATABASE_JDBC_POOL = new Pool<>();
+
     static {
         if (!BaseConfig.DATABASE_FILE.exists()) {
             AccessDatabaseJdbc.create(BaseConfig.DATABASE_FILE.getPath(), BaseConfig.DATABASE_FILE.getName()).close();
         }
+
+        // 扫包装配database
+        List<Class<?>> scan = PackageUtil.scan(AbstractPO.class);
+        int size = 0;
+        for (Class<?> c : scan) {
+            if (c.toString().startsWith("class") && !c.toString().contains("$") && c != AbstractPO.class) {
+                size++;
+                System.out.println("加载database: " + c);
+                Class<AbstractPO> abstractPOClass = (Class<AbstractPO>) c;
+                DATABASE_LIST.add(new Database<>(abstractPOClass));
+            }
+        }
+
+        // 加载连接池
+        for (int i = 0; i < size; i++) {
+            ACCESS_DATABASE_JDBC_POOL.add(new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE));
+        }
+        System.out.println("连接池数量: " + ACCESS_DATABASE_JDBC_POOL.getSize());
     }
 
     private Database(Class<T> c) {
@@ -68,7 +90,7 @@ public final class Database<T extends AbstractPO> {
      * */
     public QueryResult<T> query(Query query) {
         QueryResult<T> queryResult = new QueryResult<>();
-        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE);
+        AccessDatabaseJdbc accessDatabaseJdbc = ACCESS_DATABASE_JDBC_POOL.get();
         try {
             if (query != null) {
                 Map<String, Object> filter = query.getFilter();
@@ -88,7 +110,7 @@ public final class Database<T extends AbstractPO> {
             queryResult.setData(tList);
             return queryResult;
         } finally {
-            accessDatabaseJdbc.close();
+            ACCESS_DATABASE_JDBC_POOL.add(accessDatabaseJdbc);
         }
     }
 
@@ -105,7 +127,7 @@ public final class Database<T extends AbstractPO> {
         if (t == null) {
             return;
         }
-        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE);
+        AccessDatabaseJdbc accessDatabaseJdbc = ACCESS_DATABASE_JDBC_POOL.get();
         try {
             if (t.getId() == null) {
                 Map<String, Object> map = mapToColumn(ObjectUtil.parseMap(t), c);
@@ -125,7 +147,7 @@ public final class Database<T extends AbstractPO> {
                 }
             }
         } finally {
-            accessDatabaseJdbc.close();
+            ACCESS_DATABASE_JDBC_POOL.add(accessDatabaseJdbc);
         }
     }
 
@@ -179,11 +201,11 @@ public final class Database<T extends AbstractPO> {
         sql = sql.substring(0, sql.length() - 2);
         sql = StringUtil.append(sql, " WHERE ID = " + id);
 
-        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE);
+        AccessDatabaseJdbc accessDatabaseJdbc = ACCESS_DATABASE_JDBC_POOL.get();
         try {
             accessDatabaseJdbc.execute(sql);
         } finally {
-            accessDatabaseJdbc.close();
+            ACCESS_DATABASE_JDBC_POOL.add(accessDatabaseJdbc);
         }
     }
 
@@ -196,11 +218,11 @@ public final class Database<T extends AbstractPO> {
         if (id == null) {
             throw new InfoException("id不能为空");
         }
-        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE);
+        AccessDatabaseJdbc accessDatabaseJdbc = ACCESS_DATABASE_JDBC_POOL.get();
         try {
             accessDatabaseJdbc.execute("DELETE FROM " + tableName + " WHERE ID = " + id);
         } finally {
-            accessDatabaseJdbc.close();
+            ACCESS_DATABASE_JDBC_POOL.add(accessDatabaseJdbc);
         }
     }
 
@@ -223,7 +245,7 @@ public final class Database<T extends AbstractPO> {
      * @return 下一个id
      * */
     private Long getNextId() {
-        AccessDatabaseJdbc accessDatabaseJdbc = new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE);
+        AccessDatabaseJdbc accessDatabaseJdbc = ACCESS_DATABASE_JDBC_POOL.get();
         try {
             List<Map<String, Object>> list = accessDatabaseJdbc.queryBySql("SELECT * FROM " + tableName + " ORDER BY ID DESC");
             if (list.size() == 0) {
@@ -236,7 +258,7 @@ public final class Database<T extends AbstractPO> {
             }
             return Long.parseLong(id.toString()) + 1;
         } finally {
-            accessDatabaseJdbc.close();
+            ACCESS_DATABASE_JDBC_POOL.add(accessDatabaseJdbc);
         }
     }
 
@@ -247,11 +269,13 @@ public final class Database<T extends AbstractPO> {
                 return (Database<E>) database;
             }
         }
-        Database<E> database = new Database<>(c);
-        DATABASE_LIST.add(database);
-        System.out.println("新的database: " + c.getName());
-        return database;
+        throw new InfoException("database未找到");
     }
+
+    /**
+     * 初始化
+     * */
+    public static void init() {}
 
     /**
      * 将map的key转换成column注解的值
