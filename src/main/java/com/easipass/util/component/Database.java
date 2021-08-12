@@ -37,10 +37,8 @@ public final class Database<T extends AbstractPO> {
 
         // 扫包装配database
         List<Class<?>> scan = PackageUtil.scan(AbstractPO.class);
-        int size = 0;
         for (Class<?> c : scan) {
             if (c.toString().startsWith("class") && !c.toString().contains("$") && c != AbstractPO.class) {
-                size++;
                 System.out.println("加载database: " + c);
                 Class<AbstractPO> abstractPOClass = (Class<AbstractPO>) c;
                 DATABASE_LIST.add(new Database<>(abstractPOClass));
@@ -48,7 +46,7 @@ public final class Database<T extends AbstractPO> {
         }
 
         // 加载连接池
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < 30; i++) {
             ACCESS_DATABASE_JDBC_POOL.add(new AccessDatabaseJdbc(BaseConfig.DATABASE_FILE));
         }
         System.out.println("连接池数量: " + ACCESS_DATABASE_JDBC_POOL.getSize());
