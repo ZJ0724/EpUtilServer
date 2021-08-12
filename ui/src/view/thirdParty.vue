@@ -49,8 +49,20 @@
                 <ep-table :data="thirdPartyUrls" style="margin-top: 10px;">
                     <ep-table-item column="url" title="url"></ep-table-item>
                     <ep-table-item column="note" title="备注"></ep-table-item>
-                    <ep-table-item column="requestHeader" title="请求头"></ep-table-item>
-                    <ep-table-item column="requestData" title="请求参数"></ep-table-item>
+                    <ep-table-item column="requestHeader" title="请求头">
+                        <template slot-scope="props">
+                            <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                                {{props.row.requestHeader}}
+                            </div>
+                        </template>
+                    </ep-table-item>
+                    <ep-table-item column="requestData" title="请求参数">
+                        <template slot-scope="props">
+                            <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                                {{props.row.requestData}}
+                            </div>
+                        </template>
+                    </ep-table-item>
                     <ep-table-item column="action" title="操作">
                         <template slot-scope="props">
                             <ep-button @click="saveThirdPartyUrlPopup.open(props.row)" type="text">编辑</ep-button>

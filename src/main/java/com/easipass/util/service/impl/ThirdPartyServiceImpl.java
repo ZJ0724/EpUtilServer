@@ -28,7 +28,13 @@ public final class ThirdPartyServiceImpl implements ThirdPartyService {
         if (StringUtil.isEmpty(requestData)) {
             throw new InfoException("请求数据不能为空");
         }
-        Map<?, ?> requestDataMap = JsonUtil.parseObject(requestData, Map.class);
+
+        Object requestDataMap;
+        try {
+            requestDataMap = JsonUtil.parseObject(requestData, Map.class);
+        } catch (Exception e) {
+            requestDataMap = JsonUtil.parseObject(requestData, List.class);
+        }
 
         // 获取用户信息
         Map<String, Object> user = SWGDDatabaseUtil.queryOne("SELECT * FROM SWGD.T_SWGD_SUPPLY_USER WHERE SENDER = '" + userCode + "'");

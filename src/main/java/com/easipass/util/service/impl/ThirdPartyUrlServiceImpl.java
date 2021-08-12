@@ -37,7 +37,11 @@ public final class ThirdPartyUrlServiceImpl implements ThirdPartyUrlService {
             try {
                 JsonUtil.parseObject(thirdPartyUrlPO.getRequestData(), Map.class);
             } catch (Exception e) {
-                throw new InfoException("请求参数非json格式");
+                try {
+                    JsonUtil.parseObject(thirdPartyUrlPO.getRequestData(), List.class);
+                } catch (Exception e1) {
+                    throw new InfoException("请求参数非json格式");
+                }
             }
         }
 
