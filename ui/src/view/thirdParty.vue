@@ -139,7 +139,7 @@
     import thirdPartyApi from "../api/thirdPartyApi.js";
     import alterUtil from "../util/alterUtil.js";
     import thirdPartyUrlApi from "../api/thirdPartyUrlApi.js";
-    import {variable} from "../util/zj0724-common-1.0.0.js";
+    import commonUtil from "../util/commonUtil.js";
 
     export default {
         name: "thirdParty.vue",
@@ -200,11 +200,11 @@
 
                     open(data) {
                         this.show = true;
-                        variable.clean(current.saveThirdPartyUrl);
-                        if (variable.isEmpty(data)) {
+                        commonUtil.variable.clean(current.saveThirdPartyUrl);
+                        if (commonUtil.variable.isEmpty(data)) {
                             this.title = "新增";
                         } else {
-                            variable.assignment(current.saveThirdPartyUrl, data);
+                            commonUtil.variable.assignment(current.saveThirdPartyUrl, data);
                             this.title = "编辑";
                         }
                     }
@@ -217,11 +217,11 @@
 
         methods: {
             async sendApi() {
-                let req = variable.clone(this.send);
-                if (!variable.isEmpty(req.requestHeader)) {
+                let req = commonUtil.variable.clone(this.send);
+                if (!commonUtil.variable.isEmpty(req.requestHeader)) {
                     try {
                         req.requestHeader = JSON.parse(req.requestHeader);
-                        if (!variable.isObject(req.requestHeader)) {
+                        if (!commonUtil.variable.isObject(req.requestHeader)) {
                             return Promise.reject("请求头错误");
                         }
                     } catch (e) {

@@ -65,8 +65,8 @@
 
 <script>
     import cusResultApi from "../api/cusResultApi.js";
-    import {variable} from "../util/zj0724-common-1.0.0.js";
     import alterUtil from "../util/alterUtil.js";
+    import commonUtil from "../util/commonUtil.js";
 
     export default {
         name: "transResult.vue",
@@ -100,7 +100,7 @@
 
         methods: {
             async uploadTransResultApi() {
-                let req = variable.clone(this.upload);
+                let req = commonUtil.variable.clone(this.upload);
                 if (!this.tongXunDisplay) {
                     req.tongXun = null;
                 }

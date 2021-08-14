@@ -144,10 +144,10 @@
 
 <script>
     import ApiModuleApi from "../api/ApiModuleApi.js";
-    import {variable} from "../util/zj0724-common-1.0.0.js";
     import alterUtil from "../util/alterUtil.js";
     import apiTestCase from "./apiTest/apiTestCase.vue";
     import apiVariableApi from "../api/apiVariableApi.js";
+    import commonUtil from "../util/commonUtil.js";
 
     export default {
         name: "apiTest.vue",
@@ -194,9 +194,9 @@
                     open(data) {
                         this.show = true;
                         if (data === null) {
-                            variable.clean(current.saveApiModule);
+                            commonUtil.variable.clean(current.saveApiModule);
                         } else {
-                            variable.assignment(current.saveApiModule, data);
+                            commonUtil.variable.assignment(current.saveApiModule, data);
                         }
                     },
 
@@ -222,7 +222,7 @@
 
                 alterUtil,
 
-                variable
+                variable: commonUtil.variable
             };
         },
 

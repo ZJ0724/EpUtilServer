@@ -1,4 +1,4 @@
-import {http} from "../util/zj0724-common-1.0.0.js";
+import commonUtil from "../util/commonUtil.js";
 import baseConfig from "../config/baseConfig.js";
 
 export default {
@@ -11,7 +11,7 @@ export default {
                 }
                 data.header["content-type"] = "application/json";
             }
-            http.send(data).then((response) => {
+            commonUtil.http.send(data).then((response) => {
                 let responseJson = JSON.parse(response.toString());
                 let flag = responseJson.flag;
                 // let errorCode = responseJson.errorCode;
@@ -23,6 +23,18 @@ export default {
                 } else {
                     errorCallback(errorMessage);
                 }
+            });
+        });
+    },
+
+    download(data) {
+        return new Promise((successCallback, errorCallback) => {
+            commonUtil.http.download(data).then(() => {
+                successCallback();
+            }).catch((response) => {
+                let responseJson = JSON.parse(response.toString());
+                let errorMessage = responseJson.errorMessage;
+                errorCallback(errorMessage);
             });
         });
     }

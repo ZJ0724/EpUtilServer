@@ -4,7 +4,7 @@ import com.easipass.util.config.BaseConfig;
 import com.easipass.util.entity.po.AbstractPO;
 import com.easipass.util.entity.po.Column;
 import com.easipass.util.entity.po.Table;
-import com.zj0724.common.component.Pool;
+import com.zj0724.common.entity.Pool;
 import com.zj0724.common.component.jdbc.AccessDatabaseJdbc;
 import com.zj0724.common.entity.QueryResult;
 import com.zj0724.common.exception.InfoException;
@@ -93,7 +93,7 @@ public final class Database<T extends AbstractPO> {
             if (query != null) {
                 Map<String, Object> filter = query.getFilter();
                 if (filter != null) {
-                    Map<String, Object> map = mapToColumn(filter, this.c);
+                    Map<String, Object> map = AbstractPO.mapToColumn(filter, this.c);
                     query.setFilter(map);
                 }
             }
@@ -102,7 +102,7 @@ public final class Database<T extends AbstractPO> {
             List<T> tList = new ArrayList<>();
             List<Map<String, Object>> mapList = data.getData();
             for (Map<String, Object> map : mapList) {
-                map = mapToField(map, this.c);
+                map = AbstractPO.mapToField(map, this.c);
                 tList.add(MapUtil.parseObject(map, this.c));
             }
             queryResult.setData(tList);
@@ -128,7 +128,7 @@ public final class Database<T extends AbstractPO> {
         AccessDatabaseJdbc accessDatabaseJdbc = ACCESS_DATABASE_JDBC_POOL.get();
         try {
             if (t.getId() == null) {
-                Map<String, Object> map = mapToColumn(ObjectUtil.parseMap(t), c);
+                Map<String, Object> map = AbstractPO.mapToColumn(ObjectUtil.parseMap(t), c);
                 map.put("ID", getNextId());
                 String sql = SqlUtil.parseInsertSql(map, c.getAnnotation(Table.class).name());
                 accessDatabaseJdbc.execute(sql);
@@ -137,7 +137,7 @@ public final class Database<T extends AbstractPO> {
                 query.addFilter("id", t.getId());
                 QueryResult<T> query1 = query(query);
                 if (query1.getCount() == 0) {
-                    Map<String, Object> map = mapToColumn(ObjectUtil.parseMap(t), c);
+                    Map<String, Object> map = AbstractPO.mapToColumn(ObjectUtil.parseMap(t), c);
                     String sql = SqlUtil.parseInsertSql(map, c.getAnnotation(Table.class).name());
                     accessDatabaseJdbc.execute(sql);
                 } else {
@@ -149,23 +149,73 @@ public final class Database<T extends AbstractPO> {
         }
     }
 
+//    /**
+//     * 保存
+//     *
+//     * @param tList tList
+//     * */
+//    public void save(List<T> tList) {
+//        if (tList == null) {
+//            return;
+//        }
+//        for (T t : tList) {
+//            if (t.getId() != null) {
+//                delete(t.getId());
+//            }
+//        }
+//        for (T t : tList) {
+//            save(t);
+//        }
+//    }
+
     /**
      * 保存
      *
-     * @param tList tList
+     * @param data data
      * */
-    public void save(List<T> tList) {
-        if (tList == null) {
+    public void save(List<? extends AbstractPO> data) {
+        if (data == null) {
             return;
         }
-        for (T t : tList) {
-            if (t.getId() != null) {
-                delete(t.getId());
+        if (c == null) {
+            return;
+        }
+
+        for (Object o : data) {
+            if (o.getClass() == this.c) {
+                T parse = ObjectUtil.parse(o, this.c);
+                if (parse.getId() != null) {
+                    delete(parse.getId());
+                }
+                save(parse);
             }
         }
-        for (T t : tList) {
-            save(t);
+    }
+
+    /**
+     * 保存
+     *
+     * @param data data
+     * @param c c
+     * */
+    public void save(List<Object> data, Class<? extends AbstractPO> c) {
+        if (data == null) {
+            return;
         }
+        if (c == null) {
+            return;
+        }
+        if (this.c != c) {
+            return;
+        }
+
+        List<T> tList = new ArrayList<>();
+        for (Object o : data) {
+            if (o.getClass() == this.c) {
+                tList.add(ObjectUtil.parse(o, this.c));
+            }
+        }
+        save(tList);
     }
 
     /**
@@ -238,6 +288,18 @@ public final class Database<T extends AbstractPO> {
     }
 
     /**
+     * 删除所有
+     * */
+    public void deleteAll() {
+        AccessDatabaseJdbc accessDatabaseJdbc = ACCESS_DATABASE_JDBC_POOL.get();
+        try {
+            accessDatabaseJdbc.execute("DELETE FROM " + this.tableName);
+        } finally {
+            ACCESS_DATABASE_JDBC_POOL.add(accessDatabaseJdbc);
+        }
+    }
+
+    /**
      * 获取下一个id
      *
      * @return 下一个id
@@ -274,61 +336,5 @@ public final class Database<T extends AbstractPO> {
      * 初始化
      * */
     public static void init() {}
-
-    /**
-     * 将map的key转换成column注解的值
-     *
-     * @param map map
-     * @param c c
-     *
-     * @return 新的map
-     * */
-    private static Map<String, Object> mapToColumn(Map<?, ?> map, Class<? extends AbstractPO> c) {
-        Map<String, Object> result = new HashMap<>();
-        Set<? extends Map.Entry<?, ?>> entries = map.entrySet();
-        List<Field> allFields = ClassUtil.getAllFields(c);
-        for (Map.Entry<?, ?> entry : entries) {
-            String newKey = null;
-            for (Field field : allFields) {
-                if (field.getName().equals(entry.getKey())) {
-                    newKey = field.getAnnotation(Column.class).name();
-                    break;
-                }
-            }
-            if (newKey == null) {
-                throw new ErrorException("map转换出错：" + entry.getKey());
-            }
-            result.put(newKey, entry.getValue());
-        }
-        return result;
-    }
-
-    /**
-     * 将map的key转换成类的值
-     *
-     * @param map map
-     * @param c c
-     *
-     * @return 新的map
-     * */
-    private static Map<String, Object> mapToField(Map<String, Object> map, Class<? extends AbstractPO> c) {
-        Map<String, Object> result = new HashMap<>();
-        Set<Map.Entry<String, Object>> entries = map.entrySet();
-        List<Field> allFields = ClassUtil.getAllFields(c);
-        for (Map.Entry<String, Object> entry : entries) {
-            String newKey = null;
-            for (Field field : allFields) {
-                if (field.getAnnotation(Column.class).name().equals(entry.getKey())) {
-                    newKey = field.getName();
-                    break;
-                }
-            }
-            if (newKey == null) {
-                throw new ErrorException("map转换出错：" + entry.getKey());
-            }
-            result.put(newKey, entry.getValue());
-        }
-        return result;
-    }
 
 }
