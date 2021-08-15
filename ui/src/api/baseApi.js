@@ -5,12 +5,6 @@ export default {
     send(data) {
         return new Promise((successCallback, errorCallback) => {
             data.url = baseConfig.server + data.url;
-            if (data.type === "POST") {
-                if (data.header === undefined) {
-                    data.header = {};
-                }
-                data.header["content-type"] = "application/json";
-            }
             commonUtil.http.send(data).then((response) => {
                 let responseJson = JSON.parse(response.toString());
                 let flag = responseJson.flag;
@@ -28,6 +22,7 @@ export default {
     },
 
     download(data) {
+        data.url = baseConfig.server + data.url;
         return new Promise((successCallback, errorCallback) => {
             commonUtil.http.download(data).then(() => {
                 successCallback();

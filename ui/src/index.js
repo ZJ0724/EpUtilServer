@@ -11,6 +11,7 @@ import config from "./view/config.vue";
 import agentResult from "./view/agentResult.vue";
 import transResult from "./view/transResult.vue";
 import apiTest from "./view/apiTest.vue";
+import system from "./view/system.vue";
 
 // 组件
 import inputLabel from "./component/inputLabel.vue";
@@ -34,21 +35,21 @@ new Vue({
                 path: "/cusResult",
                 component: cusResult,
                 meta: {
-                    title:"报关单回执"
+                    title: "报关单回执"
                 }
             },
             {
                 path: "/agentResult",
                 component: agentResult,
                 meta: {
-                    title:"代理委托回执"
+                    title: "代理委托回执"
                 }
             },
             {
                 path: "/transResult",
                 component: transResult,
                 meta: {
-                    title:"转关单回执"
+                    title: "转关单回执"
                 }
             },
             {
@@ -59,21 +60,28 @@ new Vue({
                 path: "/thirdParty",
                 component: thirdParty,
                 meta: {
-                    title:"第三方接口调试"
+                    title: "第三方接口调试"
                 }
             },
             {
                 path: "/apiTest",
                 component: apiTest,
                 meta: {
-                    title:"接口测试"
+                    title: "接口测试"
                 }
             },
             {
                 path: "/config",
                 component: config,
                 meta: {
-                    title:"配置"
+                    title: "配置"
+                }
+            },
+            {
+                path: "/system",
+                component: system,
+                meta: {
+                    title: "系统"
                 }
             }
         ]
