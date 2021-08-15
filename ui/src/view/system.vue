@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-loading="loading">
         <div class="panel">
             <ep-button style="width: 100%;" type="primary" @click="() => {
                 exportDatabaseApi().then(() => {
@@ -26,6 +26,8 @@
 
         data() {
             return {
+                loading: false,
+
                 importDatabase: {
                     database: null
                 },
@@ -48,15 +50,20 @@
             },
 
             // 导入事件
-            _importDatabaseEvent() {
-                commonUtil.file.select().then((file) => {
-                    this.importDatabase.database = file;
-                    this.importDatabaseApi().then(() => {
-                        alterUtil.success("完成");
-                    }).catch((m) => {
-                        alterUtil.error(m);
+            async _importDatabaseEvent() {
+                this.loading = true;
+                try {
+                    await commonUtil.file.select().then(async (file) => {
+                        this.importDatabase.database = file;
+                        await this.importDatabaseApi().then(() => {
+                            alterUtil.success("完成");
+                        }).catch((m) => {
+                            alterUtil.error(m);
+                        });
                     });
-                });
+                } finally {
+                    this.loading = false;
+                }
             }
         }
     }

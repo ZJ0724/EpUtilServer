@@ -1,6 +1,10 @@
 spring:
   application:
     name: ep-util
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
 server:
   servlet:
     context-path: /${spring.application.name}
