@@ -206,7 +206,7 @@ public final class CusResultServiceImpl implements CusResultService {
                 }
                 String TRANS_PRE_ID = MapUtil.getValue(maps.get(0), "TRANS_PRE_ID", String.class);
                 if (StringUtil.isEmpty(TRANS_PRE_ID)) {
-                    TRANS_PRE_ID = "SEQ_NO_" + copSeqNo;
+                    TRANS_PRE_ID = copSeqNo + "_SEQ_NO";
                     TRANS_PRE_ID = TRANS_PRE_ID.substring(0, 20);
                 }
                 String data = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
@@ -234,12 +234,12 @@ public final class CusResultServiceImpl implements CusResultService {
                 }
                 String TRANS_PRE_ID = MapUtil.getValue(maps.get(0), "TRANS_PRE_ID", String.class);
                 if (StringUtil.isEmpty(TRANS_PRE_ID)) {
-                    TRANS_PRE_ID = "SEQ_NO_" + copSeqNo;
+                    TRANS_PRE_ID = copSeqNo + "_SEQ_NO";
                     TRANS_PRE_ID = TRANS_PRE_ID.substring(0, 20);
                 }
                 String PRE_NO = MapUtil.getValue(maps.get(0), "PRE_NO", String.class);
                 if (StringUtil.isEmpty(PRE_NO)) {
-                    PRE_NO = "TRANS_NO_" + copSeqNo;
+                    PRE_NO = copSeqNo + "_TRANS_NO";
                     PRE_NO = PRE_NO.substring(0, 20);
                 }
                 String data = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
