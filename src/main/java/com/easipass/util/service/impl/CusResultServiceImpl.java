@@ -194,6 +194,12 @@ public final class CusResultServiceImpl implements CusResultService {
             ConfigPO DATABASE_PASSWORD = configService.getByCode(ConfigPO.Groups.UPLOAD_TRANS_RESULT.DATABASE_PASSWORD);
             jdbc = new OracleJdbc(DATABASE_HOST.getData(), Integer.parseInt(DATABASE_PORT.getData()), DATABASE_SID.getData(), DATABASE_USERNAME.getData(), DATABASE_PASSWORD.getData());
 
+            // seqNo
+            String seqNo = "SEQNO" + DateUtil.format(new Date(), "yyyyMMddHHmmss");
+
+            // PRE_NO
+            String preNO = "PRENO" + DateUtil.format(new Date(), "yyyyMMddHHmmss");
+
             // 上传通讯回执
             if (tongXun != null) {
                 // 查询TRANS_PRE_ID
@@ -206,8 +212,7 @@ public final class CusResultServiceImpl implements CusResultService {
                 }
                 String TRANS_PRE_ID = MapUtil.getValue(maps.get(0), "TRANS_PRE_ID", String.class);
                 if (StringUtil.isEmpty(TRANS_PRE_ID)) {
-                    TRANS_PRE_ID = copSeqNo + "_SEQ_NO";
-                    TRANS_PRE_ID = TRANS_PRE_ID.substring(0, 20);
+                    TRANS_PRE_ID = seqNo;
                 }
                 String data = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
                         "<TrnImportResponse xmlns=\"http://www.chinaport.gov.cn/trn\">\n" +
@@ -234,13 +239,11 @@ public final class CusResultServiceImpl implements CusResultService {
                 }
                 String TRANS_PRE_ID = MapUtil.getValue(maps.get(0), "TRANS_PRE_ID", String.class);
                 if (StringUtil.isEmpty(TRANS_PRE_ID)) {
-                    TRANS_PRE_ID = copSeqNo + "_SEQ_NO";
-                    TRANS_PRE_ID = TRANS_PRE_ID.substring(0, 20);
+                    TRANS_PRE_ID = seqNo;
                 }
                 String PRE_NO = MapUtil.getValue(maps.get(0), "PRE_NO", String.class);
                 if (StringUtil.isEmpty(PRE_NO)) {
-                    PRE_NO = copSeqNo + "_TRANS_NO";
-                    PRE_NO = PRE_NO.substring(0, 20);
+                    PRE_NO = preNO;
                 }
                 String data = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
                         "<TrnImportResponse xmlns=\"http://www.chinaport.gov.cn/trn\">\n" +

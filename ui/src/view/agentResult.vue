@@ -47,7 +47,7 @@
             };
         },
 
-        methods: {
+        methods: {			
             async uploadAgentResultApi() {
                 return await cusResultApi.uploadAgentResult(this.upload).catch((m) => {
                     return Promise.reject(m);
