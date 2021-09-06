@@ -155,8 +155,19 @@ public final class CusResultServiceImpl implements CusResultService {
 
     @Override
     public void uploadTransResult(String copSeqNo, CusResult tongXun, CusResult yeWu) {
+        // 校验
         if (StringUtil.isEmpty(copSeqNo)) {
             throw new InfoException("企业内部编号不能为空");
+        }
+        if (tongXun != null) {
+            if (StringUtil.isEmpty(tongXun.getCode())) {
+                throw new InfoException("通讯回执code不能为空");
+            }
+        }
+        if (yeWu != null) {
+            if (StringUtil.isEmpty(yeWu.getCode())) {
+                throw new InfoException("业务回执code不能为空");
+            }
         }
 
         // 获取ftp上传路径
