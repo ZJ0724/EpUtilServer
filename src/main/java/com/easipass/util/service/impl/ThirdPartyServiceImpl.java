@@ -2,7 +2,7 @@ package com.easipass.util.service.impl;
 
 import com.easipass.util.service.ThirdPartyService;
 import com.easipass.util.util.SWGDDatabaseUtil;
-import com.zj0724.common.component.Http;
+import com.zj0724.common.Http;
 import com.zj0724.common.exception.InfoException;
 import com.zj0724.common.util.JsonUtil;
 import com.zj0724.common.util.MapUtil;

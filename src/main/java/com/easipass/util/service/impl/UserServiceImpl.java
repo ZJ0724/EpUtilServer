@@ -49,7 +49,8 @@ public final class UserServiceImpl implements UserService {
             nameE.sendKeyByJs(username);
             nameE.event("input");
             chromeDriver.findElement(Selector.byCssSelector("#app > div:nth-child(1) > div.panel-main > div.panel-main-content > div > div > div.uumm-base-cv-main > div > div:nth-child(4) > form > div:nth-child(1) > div:nth-child(4) > div > div > div > div > input")).click();
-            chromeDriver.display(Selector.byText("Oper [操作员]")).click();
+            chromeDriver.display(Selector.byText("Oper [操作员]"));
+            chromeDriver.findElement(Selector.byText("Oper [操作员]")).click();
             chromeDriver.findElement(Selector.byCssSelector("#app > div:nth-child(1) > div.panel-main > div.panel-main-content > div > div > div.uumm-base-cv-main > div > div:nth-child(4) > form > div:nth-child(1) > div:nth-child(5) > div > div > div.ep-col.ep-col-22 > div > div > input")).sendKey("729391077");
             chromeDriver.await(3000);
             chromeDriver.findElement(Selector.byCssSelector("#app > div:nth-child(1) > div.panel-main > div.panel-main-content > div > div > div.uumm-base-cv-main > div > div:nth-child(4) > form > div:nth-child(1) > div:nth-child(5) > div > div > div.ep-col.ep-col-22 > div > div > input")).sendKey(Keys.ENTER);

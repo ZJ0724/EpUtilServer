@@ -1,6 +1,6 @@
 package com.easipass.util.entity.po;
 
-import com.zj0724.common.component.jdbc.AccessDatabaseJdbc;
+import com.zj0724.common.jdbc.AccessDatabaseJdbc;
 
 /**
  * ApiModule

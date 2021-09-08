@@ -4,7 +4,7 @@ import com.easipass.util.component.Database;
 import com.easipass.util.config.BaseConfig;
 import com.easipass.util.entity.po.AbstractPO;
 import com.easipass.util.service.SystemService;
-import com.zj0724.common.component.jdbc.AccessDatabaseJdbc;
+import com.zj0724.common.jdbc.AccessDatabaseJdbc;
 import com.zj0724.common.exception.InfoException;
 import com.zj0724.common.util.MapUtil;
 import org.springframework.stereotype.Service;

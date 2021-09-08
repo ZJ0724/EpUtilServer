@@ -7,15 +7,12 @@ import com.easipass.util.service.CusResultService;
 import com.easipass.util.util.ChromeDriverUtil;
 import com.easipass.util.util.SWGDDatabaseUtil;
 import com.easipass.util.util.SftpUtil;
-import com.zj0724.common.component.Ftp;
-import com.zj0724.common.component.Jdbc;
-import com.zj0724.common.component.ftp.Sftp;
-import com.zj0724.common.component.jdbc.OracleJdbc;
+import com.zj0724.common.Ftp;
+import com.zj0724.common.Jdbc;
+import com.zj0724.common.ftp.Sftp;
+import com.zj0724.common.jdbc.OracleJdbc;
 import com.zj0724.common.exception.InfoException;
-import com.zj0724.common.util.Base64Util;
-import com.zj0724.common.util.DateUtil;
-import com.zj0724.common.util.MapUtil;
-import com.zj0724.common.util.StringUtil;
+import com.zj0724.common.util.*;
 import com.zj0724.uiAuto.WebDriver;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -190,7 +187,7 @@ public final class CusResultServiceImpl implements CusResultService {
                 throw new InfoException("ftp类型不能为空");
             }
             if ("FTP".equals(FTP_TYPE.getData())) {
-                ftp = new com.zj0724.common.component.ftp.Ftp(FTP_HOST.getData(), Integer.parseInt(FTP_PORT.getData()), FTP_USERNAME.getData(), FTP_PASSWORD.getData());
+                ftp = new com.zj0724.common.ftp.Ftp(FTP_HOST.getData(), Integer.parseInt(FTP_PORT.getData()), FTP_USERNAME.getData(), FTP_PASSWORD.getData());
             } else if ("SFTP".equals(FTP_TYPE.getData())) {
                 ftp = new Sftp(FTP_HOST.getData(), Integer.parseInt(FTP_PORT.getData()), FTP_USERNAME.getData(), FTP_PASSWORD.getData());
             } else {
@@ -240,6 +237,10 @@ public final class CusResultServiceImpl implements CusResultService {
 
             // 上传业务回执
             if (yeWu != null) {
+                if (tongXun != null) {
+                    ThreadUtil.sleep(2000);
+                }
+
                 // 查询TRANS_PRE_ID, PRE_NO
                 List<Map<String, Object>> maps = jdbc.queryBySql("SELECT TRANS_PRE_ID, PRE_NO FROM SWGDIMAP.TRANS_PRE_HEAD WHERE COP_SEQ_NO = '" + copSeqNo + "'");
                 if (maps.size() == 0) {

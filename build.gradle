@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.3.8.RELEASE')
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.5.4')
     }
 }
 
@@ -21,31 +21,8 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.3.8.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.5.4'
 
     compile fileTree(dir: 'lib', includes: ['*.jar'])
-
-    // https://mvnrepository.com/artifact/com.healthmarketscience.jackcess/jackcess
-    implementation group: 'com.healthmarketscience.jackcess', name: 'jackcess', version: '4.0.0'
-
-    // https://mvnrepository.com/artifact/net.sf.ucanaccess/ucanaccess
-    implementation group: 'net.sf.ucanaccess', name: 'ucanaccess', version: '5.0.1'
-
-    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
-
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.4.3'
-
-    // https://mvnrepository.com/artifact/junit/junit
-    testImplementation group: 'junit', name: 'junit', version: '4.13.2'
-
-    // https://mvnrepository.com/artifact/com.jcraft/jsch
-    implementation group: 'com.jcraft', name: 'jsch', version: '0.1.55'
-
-    // https://mvnrepository.com/artifact/com.alibaba/fastjson
-    implementation group: 'com.alibaba', name: 'fastjson', version: '1.2.76'
-
-    // https://mvnrepository.com/artifact/commons-net/commons-net
-    implementation group: 'commons-net', name: 'commons-net', version: '3.8.0'
 }

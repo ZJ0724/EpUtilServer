@@ -2,7 +2,7 @@ package com.easipass.util.controller;
 
 import com.easipass.util.util.ChromeDriverUtil;
 import com.easipass.util.util.SWGDDatabaseUtil;
-import com.zj0724.common.component.Ftp;
+import com.zj0724.common.Ftp;
 import com.zj0724.uiAuto.Selector;
 import com.zj0724.uiAuto.WebDriver;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class TestController {
         SWGDDatabaseUtil.execute("UPDATE SWGDIMAP.TRANS_PRE_HEAD SET COP_SEQ_NO = '2021-07-20-01', STATUS = '" + reset + "' WHERE ID = '15'");
 
         // 上传报文
-        Ftp ftp = new com.zj0724.common.component.ftp.Ftp("192.168.115.18", 21, "user", "P@ssw0rd");
+        Ftp ftp = new com.zj0724.common.ftp.Ftp("192.168.115.18", 21, "user", "P@ssw0rd");
         try {
             String data = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
                     "<TrnImportResponse xmlns=\"http://www.chinaport.gov.cn/trn\">\n" +
