@@ -4,12 +4,12 @@ import com.easipass.util.Main;
 import com.easipass.util.entity.po.ConfigPO;
 import com.easipass.util.service.ConfigService;
 import com.zj0724.common.exception.InfoException;
+import com.zj0724.common.uiAuto.DriverType;
+import com.zj0724.common.uiAuto.Selector;
+import com.zj0724.common.uiAuto.WebDriver;
+import com.zj0724.common.uiAuto.webDriver.ChromeWebDriver;
+import com.zj0724.common.uiAuto.webDriver.RemoteWebDriver;
 import com.zj0724.common.util.StringUtil;
-import com.zj0724.uiAuto.DriverType;
-import com.zj0724.uiAuto.Selector;
-import com.zj0724.uiAuto.WebDriver;
-import com.zj0724.uiAuto.webDriver.ChromeWebDriver;
-import com.zj0724.uiAuto.webDriver.RemoteWebDriver;
 
 public final class ChromeDriverUtil {
 

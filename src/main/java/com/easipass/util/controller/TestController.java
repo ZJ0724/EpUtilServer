@@ -3,8 +3,8 @@ package com.easipass.util.controller;
 import com.easipass.util.util.ChromeDriverUtil;
 import com.easipass.util.util.SWGDDatabaseUtil;
 import com.zj0724.common.Ftp;
-import com.zj0724.uiAuto.Selector;
-import com.zj0724.uiAuto.WebDriver;
+import com.zj0724.common.uiAuto.Selector;
+import com.zj0724.common.uiAuto.WebDriver;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 

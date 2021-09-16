@@ -130,7 +130,7 @@ public final class Database<T extends AbstractPO> {
             if (t.getId() == null) {
                 Map<String, Object> map = AbstractPO.mapToColumn(ObjectUtil.parseMap(t), c);
                 map.put("ID", getNextId());
-                String sql = SqlUtil.parseInsertSql(map, c.getAnnotation(Table.class).name());
+                String sql = SqlUtil.parseInsertSql(c.getAnnotation(Table.class).name(), map);
                 accessDatabaseJdbc.execute(sql);
             } else {
                 Query query = new Query();
@@ -138,7 +138,7 @@ public final class Database<T extends AbstractPO> {
                 QueryResult<T> query1 = query(query);
                 if (query1.getCount() == 0) {
                     Map<String, Object> map = AbstractPO.mapToColumn(ObjectUtil.parseMap(t), c);
-                    String sql = SqlUtil.parseInsertSql(map, c.getAnnotation(Table.class).name());
+                    String sql = SqlUtil.parseInsertSql(c.getAnnotation(Table.class).name(), map);
                     accessDatabaseJdbc.execute(sql);
                 } else {
                     update(t.getId(), t);

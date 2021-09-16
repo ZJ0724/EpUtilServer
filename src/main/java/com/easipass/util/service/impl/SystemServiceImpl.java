@@ -37,7 +37,7 @@ public final class SystemServiceImpl implements SystemService {
 
             for (String table : tables) {
                 // 获取源数据
-                List<Map<String, Object>> tableData = accessDatabaseJdbc.getTableData(table);
+                List<Map<String, Object>> tableData = accessDatabaseJdbc.query(table).getData();
 
                 // 获取对应实体类
                 Class<? extends AbstractPO> classByName = AbstractPO.getClassByName(table);

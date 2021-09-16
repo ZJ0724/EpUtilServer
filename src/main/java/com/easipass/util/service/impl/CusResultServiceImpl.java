@@ -13,7 +13,7 @@ import com.zj0724.common.ftp.Sftp;
 import com.zj0724.common.jdbc.OracleJdbc;
 import com.zj0724.common.exception.InfoException;
 import com.zj0724.common.util.*;
-import com.zj0724.uiAuto.WebDriver;
+import com.zj0724.common.uiAuto.WebDriver;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Date;

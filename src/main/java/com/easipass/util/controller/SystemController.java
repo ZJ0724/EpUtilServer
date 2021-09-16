@@ -1,8 +1,8 @@
 package com.easipass.util.controller;
 
 import com.easipass.util.service.SystemService;
+import com.zj0724.common.File;
 import com.zj0724.common.exception.InfoException;
-import com.zj0724.common.util.FileUtil;
 import com.zj0724.common.util.ServletUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,11 +32,13 @@ public final class SystemController {
         java.io.File file = null;
         try {
             file = new java.io.File(systemService.getWorkspace(), database.getOriginalFilename());
-            FileUtil.setData(file, database);
+            File.createFile(file).setData(database);
             systemService.importDatabase(file);
             return Response.returnTrue();
         } finally {
-            FileUtil.delete(file == null ? null : file.getParentFile());
+            if (file != null) {
+                File.createFile(file).parent().delete();
+            }
         }
     }
 

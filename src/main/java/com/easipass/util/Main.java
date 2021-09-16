@@ -1,7 +1,6 @@
 package com.easipass.util;
 
 import com.easipass.util.component.Database;
-import com.easipass.util.entity.Port;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
@@ -25,7 +24,6 @@ public class Main implements ApplicationContextAware {
                 "|  __/ |_) |_____| |_| | |_| | |\n" +
                 " \\___| .__/       \\__,_|\\__|_|_|\n" +
                 "     |_|                        ");
-        System.setProperty("server.port", Port.getInstance().getPort() + "");
         SpringApplication springApplication = new SpringApplication(Main.class);
         springApplication.setBannerMode(Banner.Mode.OFF);
         springApplication.run(args);

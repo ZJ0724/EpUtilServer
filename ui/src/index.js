@@ -1,5 +1,5 @@
 import "./js/base.js";
-import Vue from "vue/dist/vue.esm.js";
+import Vue from "vue";
 import index from "./view/index.vue";
 
 // 路由
@@ -20,10 +20,6 @@ Vue.component("inputLabel", inputLabel);
 
 new Vue({
     el: "#main",
-
-    components: {
-        index
-    },
 
     router: new VueRouter({
         routes: [
@@ -85,5 +81,9 @@ new Vue({
                 }
             }
         ]
-    })
+    }),
+
+    render: function (c) {
+        return c(index);
+    }
 });

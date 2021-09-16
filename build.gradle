@@ -18,11 +18,18 @@ version ''
 
 repositories {
     mavenCentral()
+
+    maven {
+        credentials {
+            username '613c3bc8a300e314f854bfd4'
+            password 'HNsb9RanXzmR'
+        }
+        url "https://packages.aliyun.com/maven/repository/2137025-release-ae6xsV"
+    }
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.5.4'
 
-    compile fileTree(dir: 'lib', includes: ['*.jar'])
+    implementation group: 'com.zj0724', name: 'zj0724-common', version: '1.0.15'
 }

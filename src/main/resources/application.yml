@@ -1,4 +1,6 @@
 spring:
+  jpa:
+    open-in-view: false
   application:
     name: ep-util
   servlet:
@@ -8,3 +10,4 @@ spring:
 server:
   servlet:
     context-path: /${spring.application.name}
+  port: 8002
