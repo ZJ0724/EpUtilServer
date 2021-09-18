@@ -1,6 +1,7 @@
 package com.easipass.util;
 
 import com.easipass.util.component.Database;
+import com.easipass.util.entity.FtpConnect;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
@@ -8,11 +9,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.NonNull;
+import java.util.HashMap;
+import java.util.Map;
 
 @SpringBootApplication
 public class Main implements ApplicationContextAware {
 
     public static ApplicationContext APPLICATION_CONTEXT;
+
+    /**
+     * ftp所有连接
+     * */
+    public static final Map<Long, FtpConnect> FTP_CONNECT = new HashMap<>();
 
     public static void main(String[] args) {
         // 加载database

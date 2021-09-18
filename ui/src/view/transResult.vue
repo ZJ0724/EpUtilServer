@@ -66,7 +66,7 @@
 <script>
     import cusResultApi from "../api/cusResultApi.js";
     import alterUtil from "../util/alterUtil.js";
-    import commonUtil from "../util/commonUtil.js";
+    import commonUtil from "zj0724-common/src/index.js";
 
     export default {
         name: "transResult.vue",

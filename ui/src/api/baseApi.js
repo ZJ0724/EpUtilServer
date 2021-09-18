@@ -1,4 +1,4 @@
-import commonUtil from "../util/commonUtil.js";
+import commonUtil from "zj0724-common";
 import baseConfig from "../config/baseConfig.js";
 
 export default {

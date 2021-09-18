@@ -1,8 +1,11 @@
 package com.easipass.util.service;
 
+import com.easipass.util.Main;
+import com.easipass.util.entity.FtpConnect;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
+import java.util.Date;
 
 @Service
 public interface RunnerService extends ApplicationRunner {
@@ -10,6 +13,18 @@ public interface RunnerService extends ApplicationRunner {
     @Override
     default void run(ApplicationArguments args) {
         gc();
+
+        // 清理ftp
+        new Thread(() -> {
+            for (Long id : Main.FTP_CONNECT.keySet()) {
+                FtpConnect ftpConnect = Main.FTP_CONNECT.get(id);
+                // 5分钟不操作，自动关闭
+                if (new Date().getTime() - ftpConnect.getOperateTime().getTime() > 5 * 60 * 1000) {
+                    ftpConnect.close();
+                    Main.FTP_CONNECT.remove(id);
+                }
+            }
+        }).start();
     }
 
     void gc();

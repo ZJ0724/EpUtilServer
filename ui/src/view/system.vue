@@ -19,7 +19,7 @@
 <script>
     import systemApi from "../api/systemApi.js";
     import alterUtil from "../util/alterUtil.js";
-    import commonUtil from "../util/commonUtil.js";
+    import commonUtil from "zj0724-common/src/index.js";
 
     export default {
         name: "system.vue",

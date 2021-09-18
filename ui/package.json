@@ -3,10 +3,11 @@
   "description": "",
   "dependencies": {
     "bin-code-editor": "^0.9.0",
-    "ep-ui": "^2.6.9",
+    "ep-ui": "^2.7.5",
     "vue": "^2.6.12",
     "vue-router": "^3.4.8",
-    "vue-wechat-title": "^2.0.7"
+    "vue-wechat-title": "^2.0.7",
+    "zj0724-common": "^1.0.2"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^6.1.0",

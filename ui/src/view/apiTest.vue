@@ -147,7 +147,7 @@
     import alterUtil from "../util/alterUtil.js";
     import apiTestCase from "./apiTest/apiTestCase.vue";
     import apiVariableApi from "../api/apiVariableApi.js";
-    import commonUtil from "../util/commonUtil.js";
+    import commonUtil from "zj0724-common/src/index.js";
 
     export default {
         name: "apiTest.vue",

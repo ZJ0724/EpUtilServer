@@ -12,6 +12,7 @@ import agentResult from "./view/agentResult.vue";
 import transResult from "./view/transResult.vue";
 import apiTest from "./view/apiTest.vue";
 import system from "./view/system.vue";
+import ftp from "./view/ftp.vue";
 
 // 组件
 import inputLabel from "./component/inputLabel.vue";
@@ -78,6 +79,13 @@ new Vue({
                 component: system,
                 meta: {
                     title: "系统"
+                }
+            },
+            {
+                path: "/ftp",
+                component: ftp,
+                meta: {
+                    title: "ftp"
                 }
             }
         ]

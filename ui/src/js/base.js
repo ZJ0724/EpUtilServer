@@ -1,4 +1,4 @@
-import Vue from "vue/dist/vue.esm.js";
+import Vue from "vue";
 import "../css/base.css";
 import VueRouter from "vue-router";
 import VueWechatTitle from "vue-wechat-title";

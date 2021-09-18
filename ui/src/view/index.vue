@@ -13,6 +13,7 @@
 <!--                    <ep-menu-item @click="switchMenu('/addUser')" index="/addUser">新建用户</ep-menu-item>-->
                     <ep-menu-item @click="switchMenu('/thirdParty')" index="/thirdParty">第三方接口调试</ep-menu-item>
 <!--                    <ep-menu-item @click="switchMenu('/apiTest')" index="/apiTest">接口测试</ep-menu-item>-->
+                    <ep-menu-item @click="switchMenu('/ftp')" index="/ftp">FTP</ep-menu-item>
                     <ep-menu-item @click="switchMenu('/config')" index="/config">配置</ep-menu-item>
                     <ep-menu-item @click="switchMenu('/system')" index="/system">系统</ep-menu-item>
                 </ep-menu>

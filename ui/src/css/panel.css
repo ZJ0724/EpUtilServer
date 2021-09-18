@@ -1,6 +1,6 @@
 .panel {
-    border: 1px #0000001f solid;
+    border: 1px solid #CFD8DC;
     padding: 20px;
-    border-radius: 5px;
+    border-radius: 3px;
     background-color: white;
 }
