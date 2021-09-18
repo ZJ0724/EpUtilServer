@@ -22,7 +22,7 @@
                 <ep-button @click="_back()" icon="arrow-left-a" style="width: 60px;"></ep-button>
                 <ep-button @click="getLsApi()" icon="refresh" style="width: 60px;margin-left: 0;"></ep-button>
                 <ep-input v-model="ftpConnect.path"></ep-input>
-                <ep-button icon="navicon-round" style="width: 60px;"></ep-button>
+                <ep-button @click="ftpPathConfigPopup.open()" icon="navicon-round" style="width: 60px;"></ep-button>
             </div>
 
             <div style="margin-top: 5px;" class="panel">
@@ -87,12 +87,57 @@
                 </ep-table>
             </div>
         </ep-modal>
+
+        <!-- ftpPath弹框 -->
+        <ep-modal title="路径" v-model="ftpPathConfigPopup.display" width="1000px" :close-on-press-escape="false" :wrap-close	="false">
+            <div>
+                <div>
+                    <ep-button @click="() => {
+                        ftpPathConfig.push({});
+                    }" size="small" type="primary">新增</ep-button>
+                </div>
+
+                <ep-table style="margin-top: 20px;" size="small" :data="ftpPathConfig" can-edit>
+                    <ep-table-item column="name" title="名称"></ep-table-item>
+                    <ep-table-item column="path" title="路径"></ep-table-item>
+                    <ep-table-item column="action" title="操作">
+                        <template slot-scope="props">
+                            <div style="display: flex;">
+                                <ep-button @click="() => {
+                                    ftpConnect.path = props.row.path;
+                                    getLsApi();
+                                    ftpPathConfigPopup.display = false;
+                                }" type="text" style="color: #27AE60">进入</ep-button>
+                                <ep-button @click="() => {
+                                    saveFtpPathConfig = props.row;
+                                    saveFtpPathConfigApi().then(() => {
+                                        alterUtil.success('成功');
+                                    }).catch((m) => {
+                                        alterUtil.error(m);
+                                    });
+                                }" type="text">保存</ep-button>
+                                <ep-button @click="() => {
+                                    deleteFtpPathConfig = props.row;
+                                    deleteFtpPathConfigApi().then(() => {
+                                        alterUtil.success('成功');
+                                    }).catch((m) => {
+                                        alterUtil.error(m);
+                                    });
+                                }" style="color: #FF4D4F;" type="text">删除</ep-button>
+                            </div>
+                        </template>
+                    </ep-table-item>
+                </ep-table>
+            </div>
+        </ep-modal>
     </div>
 </template>
 
 <script>
     import ftpConfigApi from "../api/ftpConfigApi.js";
     import alterUtil from "../util/alterUtil.js";
+    import zj0724Common from "zj0724-common";
+    import ftpPathConfigApi from "../api/ftpPathConfigApi.js";
 
     export default {
         name: "ftp.vue",
@@ -124,6 +169,13 @@
                     files: []
                 },
 
+                // ftpPathConfig
+                ftpPathConfig: [],
+
+                saveFtpPathConfig: {},
+
+                deleteFtpPathConfig: {},
+
                 ftpConfigPopup: {
                     display: false,
 
@@ -150,6 +202,15 @@
                         }).catch((m) => {
                             alterUtil.error(m);
                         });
+                    }
+                },
+
+                ftpPathConfigPopup: {
+                    display: false,
+
+                    open() {
+                        this.display = true;
+                        current.queryFtpPathConfigApi();
                     }
                 },
 
@@ -183,8 +244,7 @@
                 }).then(() => {
                     this.ftpConnect.path = "/";
                 }).catch((m) => {
-                    this.ftpConnect.id = null;
-                    this.ftpConnect.path = null;
+                    zj0724Common.variable.clean(this.ftpConnect);
                     return Promise.reject(m);
                 }).finally(() => {
                     this.loading = false;
@@ -199,6 +259,7 @@
                 }).then((data) => {
                     this.ftpConnect.files = data;
                 }).catch((m) => {
+                    zj0724Common.variable.clean(this.ftpConnect);
                     this.ftpConnect.id = null;
                     alterUtil.error(m);
                 }).finally(() => {
@@ -216,6 +277,33 @@
                     return Promise.reject(m);
                 }).finally(() => {
                     this.loading = false;
+                });
+            },
+
+            queryFtpPathConfigApi() {
+                ftpPathConfigApi.query({
+                    filter: {
+                        ftpConfigId: this.ftpConnect.id
+                    }
+                }).then((data) => {
+                    this.ftpPathConfig = data.data;
+                });
+            },
+
+            async saveFtpPathConfigApi() {
+                this.saveFtpPathConfig.ftpConfigId = this.ftpConnect.id;
+                return await ftpPathConfigApi.save(this.saveFtpPathConfig).then(() => {
+                    this.queryFtpPathConfigApi();
+                }).catch((m) => {
+                    return Promise.reject(m);
+                });
+            },
+
+            async deleteFtpPathConfigApi() {
+                return await ftpPathConfigApi.delete(this.deleteFtpPathConfig).then(() => {
+                    this.queryFtpPathConfigApi();
+                }).catch((m) => {
+                    return Promise.reject(m);
                 });
             },
 

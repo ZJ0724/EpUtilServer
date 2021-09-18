@@ -35,4 +35,8 @@ public final class FtpConnect {
         return ftp;
     }
 
+    public boolean isConnected() {
+        return this.ftp.isConnected();
+    }
+
 }

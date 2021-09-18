@@ -5,7 +5,9 @@ import com.easipass.util.component.Database;
 import com.easipass.util.entity.FtpConnect;
 import com.easipass.util.entity.FtpFile;
 import com.easipass.util.entity.po.FtpConfigPO;
+import com.easipass.util.entity.po.FtpPathConfigPO;
 import com.easipass.util.service.FtpConfigService;
+import com.easipass.util.service.FtpPathConfigService;
 import com.easipass.util.service.SystemService;
 import com.zj0724.common.entity.FileInfo;
 import com.zj0724.common.entity.Query;
@@ -23,6 +25,9 @@ public final class FtpConfigServiceImpl implements FtpConfigService {
 
     @Resource
     private SystemService systemService;
+
+    @Resource
+    private FtpPathConfigService ftpPathConfigService;
 
     @Override
     public List<FtpConfigPO> getAll() {
@@ -80,6 +85,10 @@ public final class FtpConfigServiceImpl implements FtpConfigService {
     public void delete(Long id) {
         Database<FtpConfigPO> database = Database.getDatabase(FtpConfigPO.class);
         database.delete(id);
+
+        // 删除path
+        List<FtpPathConfigPO> ftpConfigId = ftpPathConfigService.query(new Query().addFilter("ftpConfigId", id)).getData();
+        ftpPathConfigService.delete(ftpConfigId);
     }
 
     @Override
@@ -90,7 +99,7 @@ public final class FtpConfigServiceImpl implements FtpConfigService {
         FtpConnect ftpConnect1 = Main.FTP_CONNECT.get(id);
         if (ftpConnect1 != null) {
             // 检查连接的完整性
-            if (!ftpConnect1.getFtp().isConnected()) {
+            if (!ftpConnect1.isConnected()) {
                 Main.FTP_CONNECT.remove(id);
                 throw new InfoException("连接已失效");
             }
@@ -124,6 +133,12 @@ public final class FtpConfigServiceImpl implements FtpConfigService {
             throw new InfoException("路径不能为空");
         }
 
+        // 检查连接的完整性
+        if (!ftpConnect.isConnected()) {
+            Main.FTP_CONNECT.remove(id);
+            throw new InfoException("连接已失效");
+        }
+
         List<FileInfo> ls = ftpConnect.getFtp().ls(path);
 
         // 返回
@@ -145,6 +160,12 @@ public final class FtpConfigServiceImpl implements FtpConfigService {
         }
         if (StringUtil.isEmpty(name)) {
             throw new InfoException("文件名不能为空");
+        }
+
+        // 检查连接的完整性
+        if (!ftpConnect.isConnected()) {
+            Main.FTP_CONNECT.remove(id);
+            throw new InfoException("连接已失效");
         }
 
         java.io.File file = new File(systemService.getWorkspace(), name);

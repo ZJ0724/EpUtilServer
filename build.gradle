@@ -31,5 +31,5 @@ repositories {
 dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.5.4'
 
-    implementation group: 'com.zj0724', name: 'zj0724-common', version: '1.0.18'
+    implementation group: 'com.zj0724', name: 'zj0724-common', version: '1.0.19'
 }
