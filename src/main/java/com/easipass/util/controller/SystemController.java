@@ -36,7 +36,7 @@ public final class SystemController {
             systemService.importDatabase(file);
             return Response.returnTrue();
         } finally {
-            if (file != null) {
+            if (file != null && file.exists()) {
                 File.createFile(file).parent().delete();
             }
         }

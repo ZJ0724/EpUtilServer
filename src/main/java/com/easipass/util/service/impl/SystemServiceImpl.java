@@ -3,11 +3,15 @@ package com.easipass.util.service.impl;
 import com.easipass.util.component.Database;
 import com.easipass.util.config.BaseConfig;
 import com.easipass.util.entity.po.AbstractPO;
+import com.easipass.util.entity.po.ConfigPO;
+import com.easipass.util.entity.po.Table;
+import com.easipass.util.service.ConfigService;
 import com.easipass.util.service.SystemService;
 import com.zj0724.common.jdbc.AccessDatabaseJdbc;
 import com.zj0724.common.exception.InfoException;
 import com.zj0724.common.util.MapUtil;
 import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +22,9 @@ import java.util.Map;
 public final class SystemServiceImpl implements SystemService {
 
     private static final Object OBJECT = new Object();
+
+    @Resource
+    private ConfigService configService;
 
     @Override
     public File exportDatabase() {
@@ -38,6 +45,20 @@ public final class SystemServiceImpl implements SystemService {
             for (String table : tables) {
                 // 获取源数据
                 List<Map<String, Object>> tableData = accessDatabaseJdbc.query(table).getData();
+
+                // 过滤
+                if (ConfigPO.class.getAnnotation(Table.class).name().equals(table)) {
+                    for (Map<String, Object> map : tableData) {
+                        if (ConfigPO.Groups.SELENIUM.getCode().equals(map.get("GROUP_CODE")) && ConfigPO.Groups.SELENIUM.SERVER.getCode().equals(map.get("CODE"))) {
+                            ConfigPO byCode = configService.getByCode(ConfigPO.Groups.SELENIUM.SERVER);
+                            map.put("DATA", byCode == null ? null : byCode.getData());
+                        }
+                        if (ConfigPO.Groups.SELENIUM.getCode().equals(map.get("GROUP_CODE")) && ConfigPO.Groups.SELENIUM.IS_SHOW.getCode().equals(map.get("CODE"))) {
+                            ConfigPO byCode = configService.getByCode(ConfigPO.Groups.SELENIUM.IS_SHOW);
+                            map.put("DATA", byCode == null ? null : byCode.getData());
+                        }
+                    }
+                }
 
                 // 获取对应实体类
                 Class<? extends AbstractPO> classByName = AbstractPO.getClassByName(table);
