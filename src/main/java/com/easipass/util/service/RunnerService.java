@@ -16,12 +16,15 @@ public interface RunnerService extends ApplicationRunner {
 
         // 清理ftp
         new Thread(() -> {
-            for (Long id : Main.FTP_CONNECT.keySet()) {
-                FtpConnect ftpConnect = Main.FTP_CONNECT.get(id);
-                // 5分钟不操作，自动关闭
-                if (new Date().getTime() - ftpConnect.getOperateTime().getTime() > 5 * 60 * 1000) {
-                    ftpConnect.close();
-                    Main.FTP_CONNECT.remove(id);
+            while (true) {
+                for (Long id : Main.FTP_CONNECT.keySet()) {
+                    FtpConnect ftpConnect = Main.FTP_CONNECT.get(id);
+                    // 5分钟不操作，自动关闭
+                    int timeout = 5 * 60 * 1000;
+                    if (new Date().getTime() - ftpConnect.getOperateTime().getTime() > timeout) {
+                        ftpConnect.close();
+                        Main.FTP_CONNECT.remove(id);
+                    }
                 }
             }
         }).start();
