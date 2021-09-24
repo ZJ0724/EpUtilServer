@@ -18,7 +18,7 @@ public final class SystemController {
 
     @GetMapping("exportDatabase")
     public void exportDatabase(HttpServletResponse httpServletResponse) {
-        ServletUtil.responseToFile(httpServletResponse, systemService.exportDatabase());
+        ServletUtil.download(httpServletResponse, systemService.exportDatabase());
     }
 
     @PostMapping("importDatabase")

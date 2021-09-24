@@ -56,7 +56,7 @@ public final class FtpConfigController {
         File download = null;
         try {
             download = ftpConfigService.download(id, path, name);
-            ServletUtil.responseToFile(httpServletResponse, download);
+            ServletUtil.download(httpServletResponse, download);
         } finally {
             if (download != null) {
                 com.zj0724.common.File.createDir(download.getParent()).delete();
