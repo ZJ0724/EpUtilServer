@@ -19,11 +19,13 @@ public interface RunnerService extends ApplicationRunner {
             while (true) {
                 for (Long id : Main.FTP_CONNECT.keySet()) {
                     FtpConnect ftpConnect = Main.FTP_CONNECT.get(id);
-                    // 5分钟不操作，自动关闭
-                    int timeout = 5 * 60 * 1000;
+                    // 1分钟不操作，自动关闭
+                    int timeout = 60 * 1000;
                     if (new Date().getTime() - ftpConnect.getOperateTime().getTime() > timeout) {
                         ftpConnect.close();
                         Main.FTP_CONNECT.remove(id);
+                        System.out.println("关闭：" + id);
+                        System.out.println("还剩：" + Main.FTP_CONNECT.size());
                     }
                 }
             }

@@ -93,21 +93,23 @@ public final class FtpConfigServiceImpl implements FtpConfigService {
 
     @Override
     public void connect(Long id) {
-        if (id == null) {
-            throw new InfoException("未选择ftp");
-        }
-        FtpConnect ftpConnect1 = Main.FTP_CONNECT.get(id);
-        if (ftpConnect1 != null) {
-            // 检查连接的完整性
-            if (!ftpConnect1.isConnected()) {
-                Main.FTP_CONNECT.remove(id);
-                throw new InfoException("连接已失效");
+        synchronized (Main.class) {
+            if (id == null) {
+                throw new InfoException("未选择ftp");
             }
-            return;
+            FtpConnect ftpConnect1 = Main.FTP_CONNECT.get(id);
+            if (ftpConnect1 != null) {
+                // 检查连接的完整性
+                if (!ftpConnect1.isConnected()) {
+                    Main.FTP_CONNECT.remove(id);
+                    throw new InfoException("连接已失效");
+                }
+                return;
+            }
+            FtpConfigPO byId = getById(id);
+            FtpConnect ftpConnect = new FtpConnect(byId);
+            Main.FTP_CONNECT.put(id, ftpConnect);
         }
-        FtpConfigPO byId = getById(id);
-        FtpConnect ftpConnect = new FtpConnect(byId);
-        Main.FTP_CONNECT.put(id, ftpConnect);
     }
 
     @Override
